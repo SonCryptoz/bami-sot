@@ -1,0 +1,75 @@
+@import "normalize.css";
+
+:root{
+    --primary: #fe2c55;
+    --text-color: #161823;
+    --black: #000;
+    --white: #fff;
+
+    --font-family: "Consolas", "sans-serif";
+
+    // default layout
+    --default-layout-header-height: 60px;
+    --default-layout-width: 1150px;
+    --default-layout-horizontal-spacer: 24px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    font-size: 62.5%;
+}
+
+body{
+    font-family: var(--font-family);
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+    color: var(--text-color);
+    overflow-y: overlay;
+}
+
+// scrollbar css
+
+
+//
+button, input, [tabindex]{
+    outline: none;
+    border: none;
+}
+
+a{
+    color: var(--text-color);
+    text-decoration: none;
+    line-height: normal;
+}
+
+// fonts embeded
+
+
+// custom tippy tooltip
+body{
+    .tippy-box{
+        font-weight: 500;
+        font-size: 1.6rem;
+        line-height: 2.2rem;
+        background-color: rgba(84, 84, 84, 0.92);
+        border-radius: 8px;
+    }
+    
+    .tippy-arrow{
+        color: rgba(84, 84, 84, 0.92);
+    }
+
+    .tippy-content{
+        padding: 8px 9px;
+    }
+
+    .tippy-box[data-placement^='bottom'] > .tippy-arrow::before{
+        top: -8px;
+    }
+} 
