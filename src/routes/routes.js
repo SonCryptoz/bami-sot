@@ -7,8 +7,10 @@ import config from "@/config";
 import Home from "@/pages/Home";
 import Order from "@/pages/Order";
 import Product from "@/pages/Product";
+import PromotionProduct from "@/pages/Product/PromotionProduct";
+import Introduction from "@/pages/Introduction";
+import Contact from "@/pages/Contact";
 import Profile from "@/pages/Profile";
-import Search from "@/pages/Search";
 import PageNotFound from "@/pages/PageNotFound";
 
 const publicRoutes = [
@@ -21,17 +23,24 @@ const publicRoutes = [
         component: Order,
     },
     {
-        path: config.routes.product,
+        path: config.routes.product.product,
         component: Product,
+    },
+    {
+        path: config.routes.product.promotionProduct,
+        component: PromotionProduct,
+    },
+    {
+        path: config.routes.introduction,
+        component: Introduction,
+    },
+    {
+        path: config.routes.contact,
+        component: Contact,
     },
     {
         path: config.routes.profile,
         component: Profile,
-        layout: null,
-    },
-    {
-        path: config.routes.search,
-        component: Search,
         layout: null,
     },
     {

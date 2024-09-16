@@ -1,0 +1,13 @@
+.title {
+    font-size: 2rem;
+    font-weight: 500;
+
+    &.active {
+        color: var(--primary);
+    }
+
+    &:hover {
+        color: var(--primary);
+        transition: linear 0.12s;
+    }
+}

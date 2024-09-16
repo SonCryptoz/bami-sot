@@ -1,21 +1,72 @@
 .wrapper {
-    position: fixed;
+    --search-border-radius: 50px;
+    --search-height: 38px;
+    --search-btn-width: 46px;
+
     top: 0;
     left: 0;
     z-index: 10;
     width: 100%;
-    height: var(--default-layout-header-height);
+    height: calc(var(--default-layout-header-height) + var(--default-layout-top-header-height));
     box-shadow: 0px 1px 1px rgb(0 0 0 / 12%);
     background-color: var(--white);
     display: flex;
+    align-items: center;
     justify-content: center;
+    flex-direction: column;
+}
+
+.set-background {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: var(--default-layout-top-header-height);
+    background-color: var(--default-header-top-background);
 }
 
 .inner {
+    max-height: var(--default-layout-header-height);
     height: 100%;
     width: var(--default-layout-width);
     padding: 0 var(--default-layout-horizontal-spacer);
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.menu-header {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+}
+
+.right-header {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .cart-account {
+        display: flex;
+        align-items: center;
+
+        .cart-icon {
+            cursor: pointer;
+            padding-right: 20px;
+        }
+
+        .account {
+            .account-title {
+                font-size: 2rem;
+                font-weight: 500;
+                padding-right: 8px;
+            }
+
+            .down-account-icon {
+                cursor: pointer;
+            }
+        }
+    }
 }
