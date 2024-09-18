@@ -1,0 +1,38 @@
+// menu wrapper
+.menu-list {
+    width: 200px;
+
+    .menu-item {
+        margin-left: 0;
+    }
+}
+
+.menu-popper {
+    padding-bottom: 0px;
+}
+
+.menu-body {
+    overflow-y: auto;
+}
+
+// menu items
+.menu-item {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    font-weight: 600;
+    padding: 11px 14px;
+    line-height: 1.8rem;
+    color: var(--text-color);
+
+    &.separate {
+        border-bottom: 1px solid rgba(22, 24, 35, 0.12);
+    }
+
+    &:hover {
+        background-color: rgba(22, 24, 35, 0.03);
+        border-radius: 0;
+        color: var(--primary);
+        transition: linear 0.12s;
+    }
+}

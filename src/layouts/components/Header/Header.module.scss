@@ -62,10 +62,17 @@
                 font-size: 2rem;
                 font-weight: 500;
                 padding-right: 8px;
+                cursor: pointer;
             }
 
             .down-account-icon {
+                font-size: 1.4rem;
                 cursor: pointer;
+            }
+
+            .account-title:hover {
+                color: var(--primary);
+                transition: linear 0.12s;
             }
         }
     }
