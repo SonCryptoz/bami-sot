@@ -1,0 +1,53 @@
+.item {
+    display: block;
+    width: 262px;
+    background-color: var(--white);
+    border-radius: 6px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    transition: linear 0.1s;
+
+    .image {
+        width: 100%;
+        padding-top: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        border-top-right-radius: 6px;
+        border-top-left-radius: 6px;
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 10px 0;
+
+        .name {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .price {
+            font-size: 1.6rem;
+            font-weight: 500;
+            width: 66%;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+
+            .current-price {
+                color: var(--section-color);
+            }
+
+            .old-price {
+                color: #959595;
+                text-decoration: line-through;
+            }
+        }
+    }
+
+    &:hover {
+        box-shadow: 0 1px 15px 0 rgba(0, 0, 0, 0.2);
+    }
+}
