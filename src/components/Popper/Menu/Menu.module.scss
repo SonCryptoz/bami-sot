@@ -24,6 +24,7 @@
     padding: 11px 14px;
     line-height: 1.8rem;
     color: var(--text-color);
+    transition: linear 0.12s;
 
     &.separate {
         border-bottom: 1px solid rgba(22, 24, 35, 0.12);
@@ -33,6 +34,5 @@
         background-color: rgba(22, 24, 35, 0.03);
         border-radius: 0;
         color: var(--primary);
-        transition: linear 0.12s;
     }
 }

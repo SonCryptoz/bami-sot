@@ -66,9 +66,12 @@
                 font-size: 2rem;
                 line-height: normal;
 
+                a {
+                    transition: linear 0.12s;
+                }
+
                 a:hover {
                     color: var(--primary);
-                    transition: linear 0.12s;
                 }
             }
         }

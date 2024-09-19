@@ -1,4 +1,5 @@
 import classNames from "classnames/bind";
+import { Link } from "react-router-dom";
 
 import config from "@/config";
 import styles from "./Header.module.scss";
@@ -10,6 +11,7 @@ import HeaderItem from "./HeaderItem";
 import Menu from "@/components/Popper/Menu";
 import AccountMenu from "@/components/Popper/AccountMenu";
 import { MENU_ITEM, ACCOUNT_ITEM } from "./Item";
+import routes from "@/config/routes";
 
 const cx = classNames.bind(styles);
 
@@ -39,7 +41,9 @@ function Header() {
                 <div className={cx("right-header")}>
                     <Search />
                     <div className={cx("cart-account")}>
-                        <FontAwesomeIcon icon={faShoppingBasket} className={cx("cart-icon")} />
+                        <Link to={routes.cart}>
+                            <FontAwesomeIcon icon={faShoppingBasket} className={cx("cart-icon")} />
+                        </Link>
                         <AccountMenu items={ACCOUNT_ITEM}>
                             <div className={cx("account")}>
                                 <span className={cx("account-title")}>Tài khoản</span>

@@ -1,6 +1,7 @@
 .title {
     font-size: 2rem;
     font-weight: 500;
+    transition: linear 0.12s;
 
     .icon {
         font-size: 1.4rem;
@@ -13,6 +14,5 @@
 
     &:hover {
         color: var(--primary);
-        transition: linear 0.12s;
     }
 }
