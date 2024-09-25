@@ -1,0 +1,22 @@
+.product-details {
+    width: var(--default-layout-width);
+    height: auto;
+    max-width: 100%;
+    padding: 0 var(--default-layout-horizontal-spacer);
+
+    .breadcrumb {
+        width: 100%;
+        padding: 20px 0;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #ddd;
+
+        span {
+            transition: linear 0.2s;
+            font-weight: 500;
+
+            &:hover {
+                color: var(--primary);
+            }
+        }
+    }
+}

@@ -1,35 +1,37 @@
+import routes from "@/config/routes";
+
 export const MENU_ITEM = [
     {
         title: "Sản phẩm mới",
-        to: "/product/new-product",
+        to: routes.product.newProduct,
     },
     {
         title: "Sản phẩm khuyến mãi",
-        to: "/product/promotion-product",
+        to: routes.product.promotionProduct,
         separate: true,
     },
     {
         title: "Bánh mỳ",
-        to: "/product/bread-product",
+        to: routes.product.breadProduct,
     },
     {
         title: "Bánh ngọt",
-        to: "/product/cake-product",
+        to: routes.product.cakeProduct,
     },
     {
         title: "Nước uống",
-        to: "/product/soft-drink-product",
+        to: routes.product.softDrinkProduct,
     },
 ];
 
 export const ACCOUNT_ITEM = [
     {
         title: "Đăng nhập",
-        to: "/login",
+        to: routes.login,
         separate: true,
     },
     {
         title: "Đăng ký",
-        to: "/register",
+        to: routes.register,
     },
 ];

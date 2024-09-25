@@ -12,6 +12,7 @@ import BreadProduct from "@/pages/Product/BreadProduct";
 import CakeProduct from "@/pages/Product/CakeProduct";
 import SoftDrinkProduct from "@/pages/Product/SoftDrinkProduct";
 import PromotionProduct from "@/pages/Product/PromotionProduct";
+import ProductDetails from "@/pages/ProductDetails";
 import Introduction from "@/pages/Introduction";
 import Contact from "@/pages/Contact";
 import Cart from "@/pages/Cart";
@@ -56,6 +57,11 @@ const publicRoutes = [
     {
         path: config.routes.introduction,
         component: Introduction,
+    },
+    {
+        path: config.routes.productDetails,
+        component: ProductDetails,
+        layout: null,
     },
     {
         path: config.routes.contact,

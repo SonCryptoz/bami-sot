@@ -1,0 +1,143 @@
+.product {
+    padding-left: 30px;
+    font-family: var(--font-family);
+
+    .title {
+        font-size: 30px;
+        font-weight: 600;
+        letter-spacing: 0.24px;
+        margin-bottom: 10px;
+    }
+
+    .price-describe {
+        border-top: 1px solid #ddd;
+
+        .price {
+            color: var(--section-color);
+            font-size: 3.6rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .describe {
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+
+            span {
+                font-size: 1.5rem;
+                font-weight: 700;
+            }
+
+            div {
+                font-size: 1.4rem;
+            }
+        }
+    }
+
+    .quantity {
+        padding: 15px 0;
+        border-bottom: 1px solid #ddd;
+
+        label {
+            font-weight: 700;
+            font-size: 1.6rem;
+        }
+
+        .control-quantity {
+            margin-top: 10px;
+            display: flex;
+
+            .button-control {
+                font-size: 2.2rem;
+                width: 50px;
+                height: 50px;
+                transition: linear 0.2s;
+                border: 1px solid var(--primary);
+                border-radius: 5px;
+                color: var(--primary);
+                background: var(--white);
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--white);
+                    background-color: var(--primary);
+                    border-color: var(--primary);
+                }
+            }
+
+            .input-control {
+                margin: 0 20px;
+                font-size: 2rem;
+                height: 50px;
+                width: 100px;
+                border: 1px solid var(--primary);
+                border-radius: 5px;
+                text-align: center;
+                font-family: var(--font-family);
+                color: var(--text-color);
+                font-weight: 600;
+                /* Căn giữa theo chiều dọc */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                /* Ẩn spinner cho WebKit */
+                -webkit-appearance: none;
+                -moz-appearance: textfield;
+                appearance: none;
+
+                /* Padding để giữ nội dung cách đều bên trong */
+                padding: 0;
+
+                &::-webkit-outer-spin-button,
+                &::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    .buy-action {
+        padding-top: 20px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        .button-buy {
+            width: 200px;
+            height: 50px;
+            font-size: 2rem;
+        }
+    }
+}
+
+.product-description {
+    width: 100%;
+    height: auto;
+    margin: 30px 0 25px 0;
+
+    .description {
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 2rem;
+    }
+
+    .content {
+        padding: 10px;
+        border: 1px solid var(--section-color);
+        border-radius: 10px;
+
+        .text-img {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            p {
+                text-align: justify;
+                margin-bottom: 15px;
+            }
+        }
+    }
+}

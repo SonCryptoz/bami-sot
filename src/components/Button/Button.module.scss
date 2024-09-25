@@ -39,10 +39,10 @@
 }
 
 .primary {
+    transition: linear 0.2s;
     color: var(--white);
     background-color: var(--primary);
     border-color: var(--primary);
-    transition: linear 0.2s;
 
     &:hover {
         border-color: var(--primary);

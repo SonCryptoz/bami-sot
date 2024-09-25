@@ -1,6 +1,49 @@
 .wrapper {
     width: 100%;
-    padding: 20px 0 26px 0;
-    background-color: aquamarine;
     flex: 1;
+}
+
+.category {
+}
+
+.content {
+    padding-bottom: 20px;
+
+    .item-content {
+        width: 100%;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .item-product {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        border-bottom: solid 1px #ddd;
+        padding-bottom: 20px;
+
+        .product-image {
+            height: 70px;
+            width: 70px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .product-shop {
+            padding-left: 10px;
+
+            .name {
+                transition: linear 0.12s;
+            }
+
+            .name:hover {
+                color: var(--primary);
+            }
+
+            .special-price {
+                color: var(--section-color);
+            }
+        }
+    }
 }

@@ -1,4 +1,23 @@
 .body {
     background-color: pink;
     height: 100%;
+
+    .wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+
+        .more-button {
+            width: 180px;
+        }
+    }
 }

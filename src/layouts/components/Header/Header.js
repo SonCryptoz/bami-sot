@@ -11,7 +11,7 @@ import HeaderItem from "./HeaderItem";
 import Menu from "@/components/Popper/Menu";
 import AccountMenu from "@/components/Popper/AccountMenu";
 import { MENU_ITEM, ACCOUNT_ITEM } from "./Item";
-import routes from "@/config/routes";
+import { Badge } from "antd";
 
 const cx = classNames.bind(styles);
 
@@ -41,8 +41,10 @@ function Header() {
                 <div className={cx("right-header")}>
                     <Search />
                     <div className={cx("cart-account")}>
-                        <Link to={routes.cart}>
-                            <FontAwesomeIcon icon={faShoppingBasket} className={cx("cart-icon")} />
+                        <Link to={config.routes.cart}>
+                            <Badge count={4} size="small" color="var(--primary)">
+                                <FontAwesomeIcon icon={faShoppingBasket} className={cx("cart-icon")} />
+                            </Badge>
                         </Link>
                         <AccountMenu items={ACCOUNT_ITEM}>
                             <div className={cx("account")}>
