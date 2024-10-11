@@ -15,8 +15,8 @@ function App() {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all-products`);
         return res.data;
     };
-    const query = useQuery({ queryKey: ["todos"], queryFn: fetchAPI });
-    console.log(query);
+    // const query = useQuery({ queryKey: ["todos"], queryFn: fetchAPI });
+    // console.log(query);
     return (
         <Router>
             <div className="App">

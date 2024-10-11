@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 
 import styles from "./BreadCrumb.module.scss";
-import img from "@/assets/images/slider-1.png";
+// import img from "@/assets/images/slider-1.png";
 
 const cx = classNames.bind(styles);
 

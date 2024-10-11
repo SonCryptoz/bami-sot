@@ -56,6 +56,12 @@
 
             .text-light {
                 color: var(--primary);
+                cursor: pointer;
+                transition: linear 0.1s;
+
+                &:hover {
+                    color: var(--section-color);
+                }
             }
         }
 
