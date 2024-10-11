@@ -7,6 +7,7 @@ import styles2 from "./ProductDetails.module.scss";
 import ProductDetailsComponent from "@/components/ProductDetailsComponent";
 import { Link } from "react-router-dom";
 import Footer from "@/layouts/components/Footer";
+import BreadCrumb from "@/components/BreadCrumb";
 
 const cx = classNames.bind(styles);
 const cy = classNames.bind(styles2);
@@ -15,6 +16,7 @@ function ProductDetails() {
     return (
         <div className={cx("wrapper")}>
             <Header />
+            <BreadCrumb title="Pizza nhân bò phô mai" />
             <div className={cy("product-details")}>
                 <div className={cy("breadcrumb")}>
                     <Link to="/">

@@ -185,6 +185,7 @@ function Footer() {
                         <a href="mailto:suka123@gmail.com">suka123@gmail.com</a>
                     </div>
                 </div>
+                <div className={cx("separate")}></div>
                 <div className={cx("bottom-footer")}>
                     <div className={cx("copyright")}>
                         <span>© Bản quyền thuộc về SonDev | Cung cấp bởi Bami Corp</span>

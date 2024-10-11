@@ -16,8 +16,8 @@ function Sidebar({ title }) {
                 <div className={cx("content")}>
                     {MENU_ITEM.map((item, index) => {
                         return (
-                            <div className={cx("item-content")}>
-                                <HeaderItem title={item.title} to={item.to} key={index} />
+                            <div className={cx("item-content")} key={index}>
+                                <HeaderItem title={item.title} to={item.to} />
                             </div>
                         );
                     })}
