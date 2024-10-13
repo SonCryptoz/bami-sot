@@ -1,4 +1,5 @@
 .wrapper {
+    height: 40px;
     min-width: 100px;
     padding: 9px 16px;
     border-radius: 5px;
@@ -71,11 +72,13 @@
 
 // button size
 .small {
+    height: 35px;
     min-width: 88px;
     padding: 4px 16px;
 }
 
 .large {
+    height: 45px;
     min-width: 140px;
     padding: 14px 16px;
 }

@@ -9,14 +9,17 @@ import images from "@/assets/images";
 import Button from "@/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import * as UserService from "@/service/UserService";
+import { useMutationHook } from "@/hooks/useMutationHook";
+import Loading from "@/components/Loading";
 
 const cx = classNames.bind(styles);
 
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
 
-    const [email, setEmail] = useState("suka123@gmail.com");
-    const [password, setPassword] = useState("12345");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleEmail = (e) => {
         setEmail(e.target.value);
@@ -31,9 +34,17 @@ function Login() {
         navigate("/register");
     };
 
+    const mutation = useMutationHook((data) => UserService.loginUser(data));
+
+    const { data, isPending } = mutation;
+
     const handleLogin = () => {
-        console.log(email, password);
+        mutation.mutate({
+            email,
+            password,
+        });
     };
+
     return (
         <div className={cx("wrapper")}>
             <div className={cx("container")}>
@@ -72,13 +83,14 @@ function Login() {
                         onChange={handlePassword}
                         type={showPassword ? "text" : "password"}
                     />
+                    {data?.status === "error" && <span>{data?.message}</span>}
                     <Button
                         disabled={!email.length || !password.length}
                         primary
                         className={cx("login")}
                         onClick={handleLogin}
                     >
-                        Đăng nhập
+                        <Loading isPending={isPending}>Đăng nhập</Loading>
                     </Button>
                     <p className={cx("text-light")}>Quên mật khẩu</p>
                     <p>

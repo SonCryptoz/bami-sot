@@ -9,6 +9,9 @@ import Button from "@/components/Button";
 import styles from "./Register.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import * as UserService from "@/service/UserService";
+import { useMutationHook } from "@/hooks/useMutationHook";
+import Loading from "@/components/Loading";
 
 const cx = classNames.bind(styles);
 
@@ -37,8 +40,16 @@ function Register() {
         navigate("/login");
     };
 
+    const mutation = useMutationHook((data) => UserService.registerUser(data));
+    console.log(mutation);
+
+    const { data, isPending } = mutation;
     const handleRegister = () => {
-        console.log("sua");
+        mutation.mutate({
+            email,
+            password,
+            confirmPassword,
+        });
     };
     return (
         <div className={cx("wrapper")}>
@@ -108,13 +119,14 @@ function Register() {
                         onChange={handleConfirmPasswsord}
                         type={showConfirmPassword ? "text" : "password"}
                     />
+                    {data?.status === "error" && <span>{data?.message}</span>}
                     <Button
                         disabled={!email.length || !password.length || !confirmPassword.length}
                         primary
                         className={cx("login")}
                         onClick={handleRegister}
                     >
-                        Đăng ký
+                        <Loading isPending={isPending}>Đăng ký</Loading>
                     </Button>
                     <p>
                         Bạn đã có tài khoản?
