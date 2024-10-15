@@ -1,7 +1,9 @@
 import classNames from "classnames/bind";
 import { Image } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch } from "react-redux";
 
 import styles from "./Login.module.scss";
 import InputForm from "@/components/InputForm";
@@ -9,9 +11,10 @@ import images from "@/assets/images";
 import Button from "@/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-import * as UserService from "@/service/UserService";
+import * as UserService from "@/services/UserService";
 import { useMutationHook } from "@/hooks/useMutationHook";
 import Loading from "@/components/Loading";
+import { updateUser } from "@/redux/slices/userSlice";
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +23,8 @@ function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const dispatch = useDispatch();
 
     const handleEmail = (e) => {
         setEmail(e.target.value);
@@ -36,7 +41,37 @@ function Login() {
 
     const mutation = useMutationHook((data) => UserService.loginUser(data));
 
-    const { data, isPending } = mutation;
+    const { data, isPending, isSuccess } = mutation;
+
+    // Hàm lấy thông tin người dùng
+    const handleGetDetailsUser = useCallback(
+        async (id, token) => {
+            const res = await UserService.getDetailsUser(id, token);
+            dispatch(updateUser({ ...res?.data, access_token: token }));
+        },
+        [dispatch],
+    );
+
+    useEffect(() => {
+        const handleLoginSuccess = async () => {
+            if (data?.access_token) {
+                localStorage.setItem("access_token", data.access_token);
+                const decoded = jwtDecode(data.access_token);
+                if (decoded?.id) {
+                    try {
+                        await handleGetDetailsUser(decoded.id, data.access_token); // Đợi lấy thông tin người dùng
+                        navigate("/"); // Chỉ điều hướng sau khi lấy thông tin thành công
+                    } catch (error) {
+                        console.error("Failed to fetch user details", error);
+                    }
+                }
+            }
+        };
+
+        if (isSuccess) {
+            handleLoginSuccess(); // Gọi hàm xử lý logic đăng nhập thành công
+        }
+    }, [isSuccess, data, handleGetDetailsUser, navigate]);
 
     const handleLogin = () => {
         mutation.mutate({
@@ -49,7 +84,7 @@ function Login() {
         <div className={cx("wrapper")}>
             <div className={cx("container")}>
                 <div className={cx("left")}>
-                    <h1>Xin chào</h1>
+                    <h1>Bami Sot xin chào</h1>
                     <p>Đăng nhập hoặc tạo tài khoản</p>
                     <InputForm
                         placeholder="example123@gmail.com"

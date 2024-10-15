@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import AccountItem from "./AccountItem";
 import { Wrapper as PopperWrapper } from "@/components/Popper";
 import styles from "./AccountMenu.module.scss";
-import { useState } from "react";
 
 const cx = classNames.bind(styles);
 

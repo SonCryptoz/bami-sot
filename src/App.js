@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 
 import { publicRoutes } from "@/routes";
 import { DefaultLayout } from "@/layouts";

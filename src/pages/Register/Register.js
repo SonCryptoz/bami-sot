@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import { Image } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import InputForm from "@/components/InputForm";
 import images from "@/assets/images";
@@ -9,9 +9,10 @@ import Button from "@/components/Button";
 import styles from "./Register.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-import * as UserService from "@/service/UserService";
+import * as UserService from "@/services/UserService";
 import { useMutationHook } from "@/hooks/useMutationHook";
 import Loading from "@/components/Loading";
+import * as message from "@/components/Message/message";
 
 const cx = classNames.bind(styles);
 
@@ -19,9 +20,15 @@ function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const [email, setEmail] = useState("suka123@gmail.com");
-    const [password, setPassword] = useState("12345");
-    const [confirmPassword, setConfirmPassword] = useState("12345");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [phone, setPhone] = useState("");
+
+    const handleName = (e) => {
+        setName(e.target.value);
+    };
 
     const handleEmail = (e) => {
         setEmail(e.target.value);
@@ -35,28 +42,55 @@ function Register() {
         setConfirmPassword(e.target.value);
     };
 
-    const navigate = useNavigate();
-    const handleLogin = () => {
-        navigate("/login");
+    const handlePhone = (e) => {
+        setPhone(e.target.value);
     };
 
-    const mutation = useMutationHook((data) => UserService.registerUser(data));
-    console.log(mutation);
+    const navigate = useNavigate();
+    const handleLogin = useCallback(() => {
+        navigate("/login");
+    }, [navigate]);
 
-    const { data, isPending } = mutation;
+    const mutation = useMutationHook((data) => UserService.registerUser(data));
+
+    const { data, isPending, isSuccess, isError } = mutation;
+
+    useEffect(() => {
+        if (isSuccess && data?.status === "success") {
+            message.success("Đăng ký thành công!");
+            handleLogin();
+        } else if (isError) {
+            message.error(data?.message || "Đăng ký thất bại, vui lòng thử lại!");
+        }
+    }, [isSuccess, isError, data, navigate, handleLogin]);
+
     const handleRegister = () => {
         mutation.mutate({
+            name,
             email,
             password,
             confirmPassword,
+            phone,
         });
     };
     return (
         <div className={cx("wrapper")}>
             <div className={cx("container")}>
                 <div className={cx("left")}>
-                    <h1>Xin chào</h1>
+                    <h1>Bami Sot xin chào</h1>
                     <p>Đăng nhập hoặc tạo tài khoản</p>
+                    <InputForm
+                        placeholder="Tên tài khoản"
+                        className={cx("input", "spacing")}
+                        value={name}
+                        onChange={handleName}
+                    />
+                    <InputForm
+                        placeholder="Số điện thoại"
+                        className={cx("input", "spacing")}
+                        value={phone}
+                        onChange={handlePhone}
+                    />
                     <InputForm
                         placeholder="example123@gmail.com"
                         className={cx("input", "spacing")}
