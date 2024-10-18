@@ -42,6 +42,24 @@
     list-style: none;
 }
 
+.content-user {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 1.6rem;
+
+    p {
+        cursor: pointer;
+        color: var(--text-color);
+        transition: linear 0.12s;
+        padding: 5px 0;
+
+        &:hover {
+            border-radius: 0;
+            color: var(--primary);
+        }
+    }
+}
+
 .right-header {
     width: 50%;
     display: flex;

@@ -1,10 +1,11 @@
 import classNames from "classnames/bind";
-import { Badge } from "antd";
+import { Badge, Popover } from "antd";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faShoppingBasket } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import Search from "../Search";
 import config from "@/config";
@@ -14,16 +15,37 @@ import HeaderItem from "./HeaderItem";
 import Menu from "@/components/Popper/Menu";
 import AccountMenu from "@/components/Popper/AccountMenu";
 import { MENU_ITEM, ACCOUNT_ITEM } from "./Item";
+import * as UserService from "@/services/UserService";
+import { resetUser } from "@/redux/slices/userSlice";
+import { useState } from "react";
+import Loading from "@/components/Loading";
 
 const cx = classNames.bind(styles);
 
 function Header() {
+    const [loading, setLoading] = useState(false);
+
     const user = useSelector((state) => state.user);
 
     const navigate = useNavigate();
     const handleLogin = () => {
         navigate("/login");
     };
+
+    const dispatch = useDispatch();
+    const handleLogout = async () => {
+        setLoading(true);
+        await UserService.logoutUser();
+        dispatch(resetUser());
+        setLoading(false);
+    };
+
+    const content = (
+        <div className={cx("content-user")}>
+            <p onClick={handleLogout}>Đăng xuất</p>
+            <p>Thông tin người dùng</p>
+        </div>
+    );
 
     return (
         <div className={cx("wrapper")}>
@@ -66,7 +88,13 @@ function Header() {
                             </Badge>
                         </Link>
                         {user?.name ? (
-                            <div className={cx("username")}>{user.name}</div>
+                            <div style={{ marginLeft: "20px" }}>
+                                <Loading isPending={loading}>
+                                    <Popover placement="bottom" content={content}>
+                                        <div className={cx("username")}>{user.name}</div>
+                                    </Popover>
+                                </Loading>
+                            </div>
                         ) : (
                             <div>
                                 <AccountMenu items={ACCOUNT_ITEM}>
