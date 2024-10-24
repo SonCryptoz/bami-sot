@@ -1,6 +1,6 @@
-import Tippy from "@tippyjs/react/headless";
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
+import { Popover } from "antd";
 
 import MenuItem from "./MenuItem";
 import { Wrapper as PopperWrapper } from "@/components/Popper";
@@ -26,16 +26,9 @@ function Menu({ children, items = [], hideOnClick = false, ...passProps }) {
     };
 
     return (
-        <Tippy
-            {...passProps}
-            interactive
-            delay={[0, 300]}
-            offset={[0, 10]}
-            placement="bottom-start"
-            render={renderResult}
-        >
+        <Popover {...passProps} placement="bottom" content={renderResult}>
             {children}
-        </Tippy>
+        </Popover>
     );
 }
 

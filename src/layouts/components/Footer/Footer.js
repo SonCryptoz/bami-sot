@@ -175,7 +175,7 @@ function Footer() {
                 </div>
                 <div className={cx("contact-footer")}>
                     <h2>CỬA HÀNG BÁNH MỲ BAMI SOT</h2>
-                    <span className={cx("address")}>Bami Sot: 1 Quang Trung, Hải Dương</span>
+                    <span className={cx("address")}>Bami Sot: 11 Quang Trung, Hải Dương</span>
                     <div className={cx("phone")}>
                         <span>Điện thoại: </span>
                         <a href="tel:0987654321">0987654321</a>

@@ -1,0 +1,93 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+.container {
+    width: var(--default-layout-width);
+    height: auto;
+    max-width: 100%;
+    display: flex;
+    padding: 0 var(--default-layout-horizontal-spacer);
+    margin-bottom: 20px;
+}
+
+.content {
+    height: auto;
+    width: 100%;
+
+    .user {
+        width: 100%;
+        height: auto;
+        border: 1px solid var(--section-color);
+        border-radius: 10px;
+        padding: 20px;
+
+        .profile {
+            display: flex;
+
+            .profile-left {
+                flex: 3;
+
+                h4 {
+                    margin-left: 10px;
+                }
+            }
+
+            .profile-right {
+                flex: 2;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+
+                .avatar {
+                    width: 200px;
+                    height: 200px;
+                    border-radius: 28px;
+                    border: 5px solid var(--primary);
+                }
+
+                .upload-btn {
+                    display: flex;
+                    align-items: center;
+                    margin-top: 28px;
+                }
+            }
+        }
+
+        .btn-update {
+            display: flex;
+            justify-content: center;
+        }
+
+        .input {
+            border-radius: 50px;
+            height: 40px;
+            color: var(--text-color);
+            font-weight: 600;
+            caret-color: var(--primary);
+            font-family: var(--font-family);
+            border-color: var(--primary);
+
+            &:focus {
+                box-shadow: none;
+            }
+
+            &:focus-within {
+                border-color: var(--section-color);
+            }
+
+            &:hover {
+                border: 1px solid var(--section-color);
+            }
+        }
+
+        .spacing {
+            margin-bottom: 20px;
+        }
+    }
+}

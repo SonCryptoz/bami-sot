@@ -1,8 +1,5 @@
 import config from "@/config";
 
-// Layouts
-//import { HeaderOnly } from "@/layouts";
-
 // Pages
 import Home from "@/pages/Home";
 import Order from "@/pages/Order";

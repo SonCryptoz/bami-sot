@@ -36,6 +36,7 @@ function Header() {
     const handleLogout = async () => {
         setLoading(true);
         await UserService.logoutUser();
+        localStorage.removeItem("access_token");
         dispatch(resetUser());
         setLoading(false);
     };
@@ -43,7 +44,13 @@ function Header() {
     const content = (
         <div className={cx("content-user")}>
             <p onClick={handleLogout}>Đăng xuất</p>
-            <p>Thông tin người dùng</p>
+            <p
+                onClick={() => {
+                    navigate("/profile");
+                }}
+            >
+                Thông tin người dùng
+            </p>
         </div>
     );
 

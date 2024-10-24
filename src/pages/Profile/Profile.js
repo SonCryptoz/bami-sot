@@ -1,5 +1,164 @@
+import { Upload } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import classNames from "classnames/bind";
+import { useEffect, useState, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import Header from "@/layouts/components/Header";
+import styles from "./Profile.module.scss";
+import Footer from "@/layouts/components/Footer";
+import InputForm from "@/components/InputForm";
+import Button from "@/components/Button";
+import * as UserService from "@/services/UserService";
+import { useMutationHook } from "@/hooks/useMutationHook";
+import Loading from "@/components/Loading";
+import * as message from "@/components/Message/message";
+import { updateUser } from "@/redux/slices/userSlice";
+import { getBase64 } from "@/utils/user";
+
+const cx = classNames.bind(styles);
+
 function Profile() {
-    return <div>Profile page</div>;
+    const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
+    const [name, setName] = useState(user?.name);
+    const [email, setEmail] = useState(user?.email);
+    const [phone, setPhone] = useState(user?.phone);
+    const [address, setAddress] = useState(user?.address);
+    const [avatar, setAvatar] = useState(user?.avatar);
+
+    useEffect(() => {
+        if (user) {
+            setName(user?.name);
+            setEmail(user?.email);
+            setPhone(user?.phone);
+            setAddress(user?.address);
+            setAvatar(user?.avatar);
+        }
+    }, [user]);
+
+    const handleName = (e) => setName(e.target.value);
+    const handleEmail = (e) => setEmail(e.target.value);
+    const handlePhone = (e) => setPhone(e.target.value);
+    const handleAddress = (e) => setAddress(e.target.value);
+
+    const handleAvatar = async (info) => {
+        const { fileList } = info;
+
+        if (fileList.length > 0) {
+            const file = fileList[0];
+
+            // Kiểm tra trạng thái upload là 'done'
+            if (file.status === "done") {
+                if (!file.url && !file.preview) {
+                    file.preview = await getBase64(file.originFileObj);
+                }
+                setAvatar(file.preview);
+            }
+        }
+    };
+
+    const mutation = useMutationHook((data) => {
+        const { id, access_token, ...res } = data;
+        return UserService.updateUser(id, res, access_token);
+    });
+    const { isPending, isSuccess, isError } = mutation;
+
+    const handleGetDetailsUser = useCallback(
+        async (id, token) => {
+            const res = await UserService.getDetailsUser(id, token);
+            dispatch(updateUser({ ...res?.data, access_token: token }));
+        },
+        [dispatch],
+    );
+
+    useEffect(() => {
+        if (isSuccess && user?.id) {
+            handleGetDetailsUser(user?.id, user?.access_token);
+            message.success("Cập nhật thông tin thành công");
+        }
+        if (isError) {
+            message.error("Cập nhật thông tin thất bại");
+        }
+    }, [isSuccess, isError, user?.id, user?.access_token, handleGetDetailsUser]);
+
+    const handleUpdate = () => {
+        mutation.mutate({ id: user?.id, name, email, phone, address, avatar, access_token: user?.access_token });
+    };
+
+    return (
+        <div className={cx("wrapper")}>
+            <Header />
+            <div className={cx("container")}>
+                <div className={cx("content")}>
+                    <h1>Thông tin người dùng</h1>
+                    <div className={cx("user")}>
+                        <div className={cx("profile")}>
+                            <div className={cx("profile-left")}>
+                                <h4>Tên tài khoản</h4>
+                                <InputForm
+                                    placeholder="Your name"
+                                    className={cx("input", "spacing")}
+                                    value={name}
+                                    onChange={handleName}
+                                />
+                                <h4>Email</h4>
+                                <InputForm
+                                    placeholder="Your email"
+                                    className={cx("input", "spacing")}
+                                    value={email}
+                                    onChange={handleEmail}
+                                />
+                                <h4>Số điện thoại</h4>
+                                <InputForm
+                                    placeholder="Your phone number"
+                                    className={cx("input", "spacing")}
+                                    value={phone}
+                                    onChange={handlePhone}
+                                />
+                                <h4>Địa chỉ</h4>
+                                <InputForm
+                                    placeholder="Your address"
+                                    className={cx("input", "spacing")}
+                                    value={address}
+                                    onChange={handleAddress}
+                                />
+                            </div>
+                            <div className={cx("profile-right")}>
+                                {avatar && (
+                                    <img
+                                        src={
+                                            avatar ||
+                                            "http://localhost:3000/static/media/bami-sot.9fdfa0bd114f70652ee6.png"
+                                        }
+                                        alt="avatar"
+                                        className={cx("avatar")}
+                                    />
+                                )}
+                                <Upload onChange={handleAvatar} maxCount={1}>
+                                    <Button
+                                        primary
+                                        leftIcon={<FontAwesomeIcon icon={faUpload} />}
+                                        className={cx("upload-btn")}
+                                    >
+                                        Tải ảnh lên
+                                    </Button>
+                                </Upload>
+                            </div>
+                        </div>
+                        <div className={cx("btn-update")}>
+                            <Button primary onClick={handleUpdate} disabled={isPending}>
+                                <Loading isPending={isPending}>Cập nhật</Loading>
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <Footer />
+        </div>
+    );
 }
 
 export default Profile;

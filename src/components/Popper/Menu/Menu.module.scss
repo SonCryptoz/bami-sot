@@ -20,8 +20,10 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
+    font-size: 1.6rem;
+    font-family: var(--font-family);
     font-weight: 600;
-    padding: 11px 14px;
+    padding: 11px 0;
     line-height: 1.8rem;
     color: var(--text-color);
     transition: linear 0.12s;
@@ -31,7 +33,6 @@
     }
 
     &:hover {
-        background-color: rgba(22, 24, 35, 0.03);
         border-radius: 0;
         color: var(--primary);
     }

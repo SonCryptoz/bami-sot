@@ -21,9 +21,20 @@
     }
 }
 
+.icon + .title,
+.title + .icon {
+    margin-left: 8px;
+}
+
 .title {
     display: flex;
     justify-content: center;
+}
+
+.icon {
+    display: inline-block;
+    width: 20px;
+    text-align: center;
 }
 
 // button types
@@ -46,6 +57,11 @@
     border-color: var(--primary);
 
     &:hover {
+        background-color: rgba(254, 177, 44, 0.5);
+        border-color: rgba(254, 177, 44, 0.5);
+    }
+
+    &:active {
         border-color: var(--primary);
         color: var(--primary);
         background: var(--white);
