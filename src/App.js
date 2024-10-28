@@ -1,17 +1,22 @@
 import { Fragment } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { publicRoutes } from "@/routes";
 import { DefaultLayout } from "@/layouts";
 import { isJSONString } from "./utils/user";
 import * as UserService from "@/services/UserService";
 import { updateUser } from "@/redux/slices/userSlice";
+import Loading from "./components/Loading";
 
 function App() {
     const dispatch = useDispatch();
+
+    const [pending, setPending] = useState(false);
+
+    const user = useSelector((state) => state.user);
 
     // Định nghĩa hàm lấy chi tiết người dùng
     const handleGetDetailsUser = useCallback(
@@ -34,10 +39,12 @@ function App() {
     };
 
     useEffect(() => {
+        setPending(true);
         const { accessToken, decoded } = handleDecoded(); // Gọi hàm handleDecoded()
         if (decoded?.id) {
             handleGetDetailsUser(decoded.id, accessToken);
         }
+        setPending(false);
     }, [handleGetDetailsUser]); // Đảm bảo rằng handleGetDetailsUser là dependency
 
     // Interceptor để làm mới token nếu hết hạn
@@ -72,30 +79,30 @@ function App() {
     return (
         <Router>
             <div className="App">
-                <Routes>
-                    {publicRoutes.map((route, index) => {
-                        const Page = route.component;
-                        let Layout = DefaultLayout;
+                <Loading isPending={pending}>
+                    <Routes>
+                        {publicRoutes.map((route, index) => {
+                            const Page = route.component;
 
-                        if (route.layout) {
-                            Layout = route.layout;
-                        } else if (route.layout === null) {
-                            Layout = Fragment;
-                        }
+                            // Xác định quyền truy cập
+                            const isAuthorized = !route.private || user.isAdmin;
 
-                        return (
-                            <Route
-                                key={index}
-                                path={route.path}
-                                element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                }
-                            />
-                        );
-                    })}
-                </Routes>
+                            let Layout = route.layout === null ? Fragment : DefaultLayout;
+
+                            return (
+                                <Route
+                                    key={index}
+                                    path={isAuthorized ? route.path : undefined}
+                                    element={
+                                        <Layout>
+                                            <Page />
+                                        </Layout>
+                                    }
+                                />
+                            );
+                        })}
+                    </Routes>
+                </Loading>
             </div>
         </Router>
     );

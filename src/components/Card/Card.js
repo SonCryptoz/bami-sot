@@ -1,10 +1,11 @@
 import classNames from "classnames/bind";
+import PropTypes from "prop-types";
 
 import styles from "./Card.module.scss";
 
 const cx = classNames.bind(styles);
 
-function CardItem() {
+function CardItem({ product }) {
     return (
         <div className={cx("item")}>
             <div
@@ -14,14 +15,18 @@ function CardItem() {
                 }}
             ></div>
             <div className={cx("product-info")}>
-                <h3 className={cx("name")}>Pizza</h3>
+                <h3 className={cx("name")}>{product.name}</h3>
                 <div className={cx("price")}>
-                    <span className={cx("current-price")}>200.000 ₫</span>
-                    <span className={cx("old-price")}>223.000 ₫</span>
+                    <span className={cx("current-price")}>{product.price.toLocaleString("vi-VN")} ₫</span>
+                    <span className={cx("old-price")}>{product.discount || 0} ₫</span>
                 </div>
             </div>
         </div>
     );
 }
+
+CardItem.propTypes = {
+    product: PropTypes.object.isRequired,
+};
 
 export default CardItem;

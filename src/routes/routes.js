@@ -15,6 +15,7 @@ import Contact from "@/pages/Contact";
 import Cart from "@/pages/Cart";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import Admin from "@/pages/Admin";
 import Profile from "@/pages/Profile";
 import PageNotFound from "@/pages/PageNotFound";
 
@@ -76,6 +77,12 @@ const publicRoutes = [
     {
         path: config.routes.register,
         component: Register,
+        layout: null,
+    },
+    {
+        path: config.routes.admin,
+        component: Admin,
+        private: true,
         layout: null,
     },
     {

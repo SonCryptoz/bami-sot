@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     name: "",
     email: "",
+    isAdmin: false,
     phone: "",
     address: "",
     avatar: "",
@@ -18,6 +19,7 @@ export const userSlice = createSlice({
             const {
                 name = "",
                 email = "",
+                isAdmin = false,
                 phone = "",
                 address = "",
                 avatar = "",
@@ -26,6 +28,7 @@ export const userSlice = createSlice({
             } = action.payload;
             state.name = name || email;
             state.email = email;
+            state.isAdmin = isAdmin;
             state.phone = phone;
             state.address = address;
             state.avatar = avatar;
@@ -35,6 +38,7 @@ export const userSlice = createSlice({
         resetUser: (state) => {
             state.name = "";
             state.email = "";
+            state.isAdmin = false;
             state.phone = "";
             state.address = "";
             state.avatar = "";
@@ -44,7 +48,6 @@ export const userSlice = createSlice({
     },
 });
 
-// Action creators are generated for each case reducer function
 export const { updateUser, resetUser } = userSlice.actions;
 
 export default userSlice.reducer;

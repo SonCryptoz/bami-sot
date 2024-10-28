@@ -1,12 +1,6 @@
 import axios from "axios";
 
-export const logoutUser = async () => {
-    const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/user/logout`,
-        {},
-        {
-            withCredentials: true,
-        },
-    );
+export const getAllProducts = async () => {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all-products`);
     return res.data;
 };
