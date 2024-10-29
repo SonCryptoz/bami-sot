@@ -22,7 +22,7 @@ import Loading from "@/components/Loading";
 
 const cx = classNames.bind(styles);
 
-function Header() {
+function Header({ isHiddenSearchBar = false, isHiddenCart = false }) {
     const [loading, setLoading] = useState(false);
 
     const user = useSelector((state) => state.user);
@@ -38,12 +38,12 @@ function Header() {
         await UserService.logoutUser();
         localStorage.removeItem("access_token");
         dispatch(resetUser());
+        navigate("/");
         setLoading(false);
     };
 
     const content = (
         <div className={cx("content-user")}>
-            <p onClick={handleLogout}>Đăng xuất</p>
             <p
                 onClick={() => {
                     navigate("/profile");
@@ -51,6 +51,16 @@ function Header() {
             >
                 Thông tin người dùng
             </p>
+            {user?.isAdmin && (
+                <p
+                    onClick={() => {
+                        navigate("/system/admin");
+                    }}
+                >
+                    Quản lý hệ thống
+                </p>
+            )}
+            <p onClick={handleLogout}>Đăng xuất</p>
         </div>
     );
 
@@ -87,13 +97,15 @@ function Header() {
                     </div>
                 </div>
                 <div className={cx("right-header")}>
-                    <Search />
+                    {!isHiddenSearchBar && <Search />}
                     <div className={cx("cart-account")}>
-                        <Link to={config.routes.cart}>
-                            <Badge count={4} size="small" color="var(--primary)">
-                                <FontAwesomeIcon icon={faShoppingBasket} className={cx("cart-icon")} />
-                            </Badge>
-                        </Link>
+                        {!isHiddenCart && (
+                            <Link to={config.routes.cart}>
+                                <Badge count={4} size="small" color="var(--primary)">
+                                    <FontAwesomeIcon icon={faShoppingBasket} className={cx("cart-icon")} />
+                                </Badge>
+                            </Link>
+                        )}
                         {user?.name ? (
                             <div style={{ marginLeft: "20px" }}>
                                 <Loading isPending={loading}>

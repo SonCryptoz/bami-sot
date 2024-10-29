@@ -15,7 +15,7 @@ import { useMutationHook } from "@/hooks/useMutationHook";
 import Loading from "@/components/Loading";
 import * as message from "@/components/Message/message";
 import { updateUser } from "@/redux/slices/userSlice";
-import { getBase64 } from "@/utils/user";
+import { getBase64 } from "@/utils";
 
 const cx = classNames.bind(styles);
 
