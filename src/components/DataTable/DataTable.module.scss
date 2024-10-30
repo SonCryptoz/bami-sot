@@ -1,0 +1,104 @@
+.table-container {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+
+    tr {
+        transition: linear 0.2s;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: calc(0.5px) solid #ccc;
+    }
+
+    /* Thiết lập chiều rộng của từng cột */
+    th:nth-child(1),
+    td:nth-child(1) {
+        /* Cột checkbox */
+        width: 5%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        /* Cột "Name" */
+        width: 30%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+        /* Cột "Age" */
+        width: 15%;
+    }
+
+    th:nth-child(4),
+    td:nth-child(4) {
+        /* Cột "Address" */
+        width: 50%;
+    }
+
+    thead {
+        background-color: #f7ddae;
+    }
+
+    th {
+        font-weight: bold;
+    }
+
+    .data-table:hover {
+        background-color: var(--primary);
+    }
+
+    input[type="checkbox"] {
+        cursor: pointer;
+    }
+}
+
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    gap: 8px;
+
+    .page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 30px;
+        width: 30px;
+    }
+
+    button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 4px 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: #fff;
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        &:hover:not(:disabled) {
+            background-color: #e6f7ff;
+        }
+    }
+
+    span {
+        font-size: 16px;
+        font-weight: bold;
+        color: var(--text-color);
+        padding: 4px 8px;
+    }
+}

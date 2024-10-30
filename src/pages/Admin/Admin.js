@@ -6,11 +6,24 @@ import { items } from "./Items";
 import Header from "@/layouts/components/Header";
 import AdminMenu from "./AdminMenu";
 import Footer from "@/layouts/components/Footer";
+import AdminUser from "@/components/AdminUser";
+import AdminProduct from "@/components/AdminProduct";
 
 const cx = classNames.bind(styles);
 
 function Admin() {
-    const [keySelected, setKeySelected] = useState("");
+    const [keySelected, setKeySelected] = useState("1");
+
+    const renderPage = (key) => {
+        switch (key) {
+            case "1":
+                return <AdminUser />;
+            case "2":
+                return <AdminProduct />;
+            default:
+                return <div>Not Available</div>;
+        }
+    };
 
     const handleOnClick = (key) => {
         setKeySelected(key);
@@ -21,7 +34,7 @@ function Admin() {
             <Header isHiddenSearchBar isHiddenCart />
             <div className={cx("container")}>
                 <AdminMenu items={items} onItemClick={handleOnClick} />
-                <div className={cx("data")}>{keySelected === "2" && <span>Key is 2</span>}</div>
+                <div className={cx("data")}>{renderPage(keySelected)}</div>
             </div>
             <Footer />
         </div>

@@ -1,8 +1,11 @@
 .container {
     display: flex;
+    margin-bottom: 10px;
 
     .data {
-        width: 100%;
         flex: 4;
+        width: 100%;
+        padding: 0 15px;
+        background-color: var(--default-header-top-background);
     }
 }
