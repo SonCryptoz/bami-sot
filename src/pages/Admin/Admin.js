@@ -33,7 +33,7 @@ function Admin() {
         <div className={cx("wrapper")}>
             <Header isHiddenSearchBar isHiddenCart />
             <div className={cx("container")}>
-                <AdminMenu items={items} onItemClick={handleOnClick} />
+                <AdminMenu items={items} onItemClick={handleOnClick} defaultSelectedKey={keySelected} />
                 <div className={cx("data")}>{renderPage(keySelected)}</div>
             </div>
             <Footer />

@@ -78,8 +78,7 @@ function Profile() {
         if (isSuccess && user?.id) {
             handleGetDetailsUser(user?.id, user?.access_token);
             message.success("Cập nhật thông tin thành công");
-        }
-        if (isError) {
+        } else if (isError) {
             message.error("Cập nhật thông tin thất bại");
         }
     }, [isSuccess, isError, user?.id, user?.access_token, handleGetDetailsUser]);

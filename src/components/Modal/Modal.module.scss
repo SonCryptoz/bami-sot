@@ -1,0 +1,103 @@
+/* CustomModal.module.scss */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: #fff;
+    width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.close-button {
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: linear 0.2s;
+
+    &:hover {
+        background-color: #eaeaea;
+    }
+}
+
+.modal-body {
+    padding: 16px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+    border-top: 1px solid #eaeaea;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.primary-btn {
+    background-color: var(--primary);
+    color: #fff;
+    transition: linear 0.2s;
+
+    &:hover {
+        background-color: rgba(242, 185, 76, 0.68);
+    }
+}
+
+.btn:not(.primary-btn) {
+    color: var(--text-color);
+    background-color: white;
+    border: 1px solid #eaeaea;
+    transition: linear 0.2s;
+
+    &:hover {
+        border: 1px solid var(--primary);
+        color: var(--primary);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

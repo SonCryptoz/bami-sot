@@ -1,10 +1,106 @@
 .wrapper {
     .btn-wrapper {
         margin-top: 10px;
+
+        .btn-add {
+            height: 100px;
+            width: 100px;
+        }
     }
 
-    .btn-add {
-        height: 100px;
-        width: 100px;
+    .custom-modal .ant-modal-content {
+        background-color: #f0f0f0; /* Đặt màu nền cho modal */
+        border-radius: 10px; /* Bo tròn các góc của modal */
+    }
+
+    .custom-modal .ant-modal-header {
+        background-color: #1890ff; /* Đặt màu nền cho header */
+        color: white; /* Màu chữ cho header */
+        font-size: 18px; /* Kích thước chữ cho tiêu đề */
+    }
+
+    .custom-modal .ant-modal-title {
+        font-weight: bold;
+    }
+
+    .custom-modal .ant-modal-body {
+        padding: 24px; /* Căn lề cho nội dung */
+        color: #333;
+    }
+
+    .custom-modal .ant-modal-footer {
+        display: flex;
+        justify-content: flex-end; /* Canh các nút sang bên phải */
+        gap: 10px; /* Khoảng cách giữa các nút */
+    }
+
+    .custom-modal .ant-btn-primary {
+        background-color: #ff6d18; /* Đổi màu cho nút chính */
+        border-color: #ff6d18;
+    }
+
+    .custom-modal .ant-btn {
+        border-radius: 5px; /* Bo tròn các nút */
+    }
+
+    .input {
+        border-radius: 50px;
+        height: 36px;
+        padding-right: 20px;
+        color: var(--text-color);
+        font-weight: 600;
+        caret-color: var(--primary);
+        font-family: var(--font-family);
+        border-color: var(--primary);
+
+        &:focus {
+            box-shadow: none;
+        }
+
+        &:focus-within {
+            border-color: var(--section-color);
+        }
+
+        &:hover {
+            border: 1px solid var(--section-color);
+        }
+    }
+
+    .image {
+        width: 68px;
+        height: 68px;
+        border-radius: 10px;
+        border: 2px solid var(--primary);
+    }
+
+    .custom-product-field {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .upload-btn {
+        width: 100%;
+    }
+}
+
+:global {
+    .custom-form-item .ant-form-item-label > label {
+        color: var(--text-color);
+        font-size: 1.8rem;
+        font-family: var(--font-family);
+    }
+
+    .ant-form-item .ant-form-item-explain-error {
+        font-family: var(--font-family);
+        font-size: 1.4rem;
+    }
+
+    .ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
+        display: none;
+    }
+
+    .ant-upload-wrapper .ant-upload-list .ant-upload-list-item-error {
+        display: none;
     }
 }

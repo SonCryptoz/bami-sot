@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import classNames from "classnames/bind";
@@ -6,8 +6,12 @@ import styles from "./AdminMenu.module.scss";
 
 const cx = classNames.bind(styles);
 
-function AdminMenu({ items, onItemClick }) {
+function AdminMenu({ items, onItemClick, defaultSelectedKey }) {
     const [selectedKey, setSelectedKey] = useState(null);
+
+    useEffect(() => {
+        setSelectedKey(defaultSelectedKey);
+    }, [defaultSelectedKey]);
 
     const handleClick = (key) => {
         setSelectedKey(key);
@@ -37,6 +41,7 @@ function AdminMenu({ items, onItemClick }) {
 AdminMenu.propTypes = {
     items: PropTypes.arrayOf(PropTypes.object).isRequired,
     onItemClick: PropTypes.func.isRequired,
+    defaultSelectedKey: PropTypes.string.isRequired,
 };
 
 export default AdminMenu;

@@ -90,3 +90,13 @@
         }
     }
 }
+
+:global {
+    .ant-upload-wrapper .ant-upload-list .ant-upload-list-item-error {
+        display: none;
+    }
+
+    .ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
+        display: none;
+    }
+}
