@@ -8,6 +8,15 @@
         }
     }
 
+    .table-data {
+        .action-icon {
+            width: 35%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.8rem;
+        }
+    }
+
     .custom-modal .ant-modal-content {
         background-color: #f0f0f0; /* Đặt màu nền cho modal */
         border-radius: 10px; /* Bo tròn các góc của modal */

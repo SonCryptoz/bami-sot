@@ -4,7 +4,7 @@ import { Form, Upload } from "antd";
 import styles from "./AdminProduct.module.scss";
 import Button from "../Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import DataTable from "../DataTable";
 import Modal from "../Modal";
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import * as ProductService from "@/services/ProductService";
 import { useMutationHook } from "@/hooks/useMutationHook";
 import Loading from "../Loading";
 import * as message from "@/components/Message/message";
+import { useQuery } from "@tanstack/react-query";
 
 const cx = classNames.bind(styles);
 
@@ -43,6 +44,18 @@ function AdminProduct() {
             message.error("Tạo sản phẩm thất bại");
         }
     }, [data, isSuccess, isError]);
+
+    const fetchAllProducts = async () => {
+        const res = await ProductService.getAllProducts();
+        console.log(res);
+        return res;
+    };
+
+    // Sử dụng useQuery để fetch dữ liệu sản phẩm
+    const { data: products } = useQuery({
+        queryKey: ["products"],
+        queryFn: fetchAllProducts,
+    });
 
     const openModal = () => setIsModalOpen(true);
     const handleClose = () => {
@@ -80,6 +93,18 @@ function AdminProduct() {
         }
     };
 
+    const productColumns = [
+        { key: "name", title: "Tên sản phẩm", dataIndex: "name" },
+        { key: "type", title: "Loại sản phẩm", dataIndex: "type" },
+        { key: "price", title: "Giá sản phẩm", dataIndex: "price" },
+    ];
+
+    const productDataWithKeys =
+        products?.data.map((product) => ({
+            ...product,
+            key: product._id,
+        })) || [];
+
     return (
         <div className={cx("wrapper")}>
             <div>
@@ -91,16 +116,25 @@ function AdminProduct() {
                 </Button>
             </div>
             <div className={cx("table-data")}>
-                <DataTable />
+                <DataTable
+                    data={productDataWithKeys}
+                    columns={productColumns}
+                    renderActions={(row) => (
+                        <div className={cx("action-icon")}>
+                            <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }} />
+                            <FontAwesomeIcon icon={faTrash} style={{ cursor: "pointer", color: "#ff2a00" }} />
+                        </div>
+                    )}
+                />
             </div>
             <Modal title="Tạo sản phẩm" isOpen={isModalOpen} onClose={handleClose}>
                 <Form
                     name="basic"
                     labelCol={{
-                        span: 8,
+                        span: 6,
                     }}
                     wrapperCol={{
-                        span: 16,
+                        span: 18,
                     }}
                     style={{
                         maxWidth: 600,
@@ -263,8 +297,8 @@ function AdminProduct() {
 
                     <Form.Item
                         wrapperCol={{
-                            offset: 8,
-                            span: 16,
+                            offset: 6,
+                            span: 18,
                         }}
                     >
                         <Button primary className={cx("upload-btn")}>

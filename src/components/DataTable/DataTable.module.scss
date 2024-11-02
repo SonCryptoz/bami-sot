@@ -1,5 +1,10 @@
 .table-container {
     width: 100%;
+    height: 50vh;
+    padding: 0 0 10px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     border-radius: 8px;
 }
 
@@ -28,20 +33,22 @@
 
     th:nth-child(2),
     td:nth-child(2) {
-        /* Cột "Name" */
-        width: 30%;
+        width: 50%;
     }
 
     th:nth-child(3),
     td:nth-child(3) {
-        /* Cột "Age" */
         width: 15%;
     }
 
     th:nth-child(4),
     td:nth-child(4) {
-        /* Cột "Address" */
-        width: 50%;
+        width: 15%;
+    }
+
+    th:nth-child(5),
+    td:nth-child(5) {
+        width: 20%;
     }
 
     thead {

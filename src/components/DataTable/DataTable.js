@@ -1,24 +1,19 @@
 import React, { useState } from "react";
 import classNames from "classnames/bind";
-import { Divider } from "antd";
-
-import styles from "./DataTable.module.scss";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
+import styles from "./DataTable.module.scss";
+
 const cx = classNames.bind(styles);
 
-const data = [
-    { key: "1", name: "John Brown", age: 32, address: "New York No. 1 Lake Park" },
-    { key: "2", name: "Jim Green", age: 42, address: "London No. 1 Lake Park" },
-    { key: "3", name: "Joe Black", age: 32, address: "Sydney No. 1 Lake Park" },
-    { key: "4", name: "Disabled User", age: 99, address: "Sydney No. 1 Lake Park" },
-];
-
-const DataTable = () => {
+const DataTable = ({ data = [], columns = [], renderActions }) => {
     const [selectedRows, setSelectedRows] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const rowsPerPage = 2;
+    const rowsPerPage = 5;
+
+    const paginatedData = data.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
     const handleSelectRow = (key) => {
         setSelectedRows((prevSelected) =>
@@ -29,22 +24,13 @@ const DataTable = () => {
     };
 
     const handleSelectAll = () => {
-        if (selectedRows.length === data.length) {
-            setSelectedRows([]);
-        } else {
-            setSelectedRows(data.map((row) => row.key));
-        }
+        setSelectedRows(selectedRows.length === data.length ? [] : data.map((row) => row.key));
     };
 
-    const handleChangePage = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-
-    const paginatedData = data.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+    const handleChangePage = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
         <div>
-            <Divider />
             <div className={cx("table-container")}>
                 <table className={cx("custom-table")}>
                     <thead>
@@ -56,9 +42,10 @@ const DataTable = () => {
                                     onChange={handleSelectAll}
                                 />
                             </th>
-                            <th>Name</th>
-                            <th>Age</th>
-                            <th>Address</th>
+                            {columns.map((col) => (
+                                <th key={col.key}>{col.title}</th>
+                            ))}
+                            {renderActions && <th>Sửa-Xóa</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -71,9 +58,10 @@ const DataTable = () => {
                                         onChange={() => handleSelectRow(row.key)}
                                     />
                                 </td>
-                                <td>{row.name}</td>
-                                <td>{row.age}</td>
-                                <td>{row.address}</td>
+                                {columns.map((col) => (
+                                    <td key={col.key}>{row[col.dataIndex]}</td>
+                                ))}
+                                {renderActions && <td>{renderActions(row)}</td>}
                             </tr>
                         ))}
                     </tbody>
@@ -95,6 +83,19 @@ const DataTable = () => {
             </div>
         </div>
     );
+};
+
+DataTable.propTypes = {
+    data: PropTypes.arrayOf(PropTypes.object),
+    columns: PropTypes.arrayOf(
+        PropTypes.shape({
+            key: PropTypes.string.isRequired,
+            title: PropTypes.string.isRequired,
+            dataIndex: PropTypes.string.isRequired,
+        }),
+    ),
+    isPending: PropTypes.bool,
+    renderActions: PropTypes.func,
 };
 
 export default DataTable;
