@@ -1,10 +1,12 @@
 import classNames from "classnames/bind";
 import { Form, Upload } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAdd, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./AdminProduct.module.scss";
 import Button from "../Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import DataTable from "../DataTable";
 import Modal from "../Modal";
 import { useEffect, useState } from "react";
@@ -14,12 +16,15 @@ import * as ProductService from "@/services/ProductService";
 import { useMutationHook } from "@/hooks/useMutationHook";
 import Loading from "../Loading";
 import * as message from "@/components/Message/message";
-import { useQuery } from "@tanstack/react-query";
 
 const cx = classNames.bind(styles);
 
 function AdminProduct() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const user = useSelector((state) => state?.user);
+    const [form] = Form.useForm();
+    const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
+    const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+    const [isPendingUpdate, setIsPendingUpdate] = useState(false);
     const [stateProduct, setStateProduct] = useState({
         name: "",
         image: "",
@@ -29,6 +34,16 @@ function AdminProduct() {
         discount: 0,
         description: "",
     });
+    const [stateProductDetails, setStateProductDetails] = useState({
+        name: "",
+        image: "",
+        type: "",
+        quantity: 0,
+        price: 0,
+        discount: 0,
+        description: "",
+    });
+    const [rowSelected, setRowSelected] = useState("");
 
     const mutation = useMutationHook((data) => {
         const res = ProductService.createProduct(data);
@@ -36,18 +51,37 @@ function AdminProduct() {
     });
     const { data, isPending, isSuccess, isError } = mutation;
 
+    const mutationUpdate = useMutationHook((data) => {
+        const { id, token, ...res } = data;
+        return ProductService.updateProduct(id, { ...res }, token);
+    });
+    const {
+        data: dataUpdated,
+        isPending: isPendingUpdated,
+        isSuccess: isSuccessUpdated,
+        isError: isErrorUpdated,
+    } = mutationUpdate;
+
     useEffect(() => {
         if (isSuccess && data?.status === "success") {
-            handleClose();
+            handleCreateClose();
             message.success("Tạo sản phẩm thành công");
         } else if (isError) {
             message.error("Tạo sản phẩm thất bại");
         }
     }, [data, isSuccess, isError]);
 
+    useEffect(() => {
+        if (isSuccessUpdated && dataUpdated?.status === "success") {
+            handleUpdateClose();
+            message.success("Cập nhật sản phẩm thành công");
+        } else if (isErrorUpdated) {
+            message.error("Cập nhật sản phẩm thất bại");
+        }
+    }, [dataUpdated, isSuccessUpdated, isErrorUpdated]);
+
     const fetchAllProducts = async () => {
         const res = await ProductService.getAllProducts();
-        console.log(res);
         return res;
     };
 
@@ -57,19 +91,34 @@ function AdminProduct() {
         queryFn: fetchAllProducts,
     });
 
-    const openModal = () => setIsModalOpen(true);
-    const handleClose = () => {
-        setIsModalOpen(false);
+    const openModal = () => setIsModalCreateOpen(true);
+    const handleCreateClose = () => {
+        setIsModalCreateOpen(false);
         setStateProduct({ name: "", image: "", type: "", quantity: 0, price: 0, discount: 0, description: "" });
+    };
+
+    const handleUpdateClose = () => {
+        setIsModalUpdateOpen(false);
     };
 
     const onFinish = () => {
         mutation.mutate(stateProduct);
     };
 
+    const onFinishUpdate = () => {
+        mutationUpdate.mutate({ id: rowSelected, token: user?.access_token, ...stateProductDetails });
+    };
+
     const handleOnChange = (e) => {
         setStateProduct({
             ...stateProduct,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleOnChangeDetails = (e) => {
+        setStateProductDetails({
+            ...stateProductDetails,
             [e.target.name]: e.target.value,
         });
     };
@@ -91,6 +140,67 @@ function AdminProduct() {
                 });
             }
         }
+    };
+
+    const handleImageDetails = async (info) => {
+        const { fileList } = info;
+
+        if (fileList.length > 0) {
+            const file = fileList[0];
+
+            // Kiểm tra trạng thái upload là 'done'
+            if (file.status === "done") {
+                if (!file.url && !file.preview) {
+                    file.preview = await getBase64(file.originFileObj);
+                }
+                setStateProductDetails({
+                    ...stateProductDetails,
+                    image: file.preview,
+                });
+            }
+        }
+    };
+
+    const handleOnRow = (record, rowIndex) => {
+        return {
+            onClick: (e) => {
+                setRowSelected(record._id);
+            },
+        };
+    };
+
+    const fetchAllDetailsProduct = async (rowSelected) => {
+        const res = await ProductService.getDetailsProduct(rowSelected);
+        if (res?.data) {
+            setStateProductDetails({
+                name: res.data.name,
+                image: res.data.image,
+                type: res.data.type,
+                quantity: res.data.quantity,
+                price: res.data.price,
+                discount: res.data.discount,
+                description: res.data.description,
+            });
+        }
+        setIsPendingUpdate(false);
+    };
+
+    useEffect(() => {
+        form.setFieldsValue(stateProductDetails);
+    }, [form, stateProductDetails]);
+
+    useEffect(() => {
+        if (rowSelected) {
+            fetchAllDetailsProduct(rowSelected);
+        }
+    }, [rowSelected]);
+
+    const handleDetailsProduct = () => {
+        if (rowSelected) {
+            setIsPendingUpdate(true);
+            fetchAllDetailsProduct(rowSelected);
+        }
+        setIsModalUpdateOpen(true);
     };
 
     const productColumns = [
@@ -121,13 +231,22 @@ function AdminProduct() {
                     columns={productColumns}
                     renderActions={(row) => (
                         <div className={cx("action-icon")}>
-                            <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }} />
-                            <FontAwesomeIcon icon={faTrash} style={{ cursor: "pointer", color: "#ff2a00" }} />
+                            <FontAwesomeIcon
+                                icon={faPen}
+                                style={{ cursor: "pointer" }}
+                                onClick={handleDetailsProduct}
+                            />
+                            <FontAwesomeIcon
+                                icon={faTrash}
+                                style={{ cursor: "pointer", color: "#ff2a00" }}
+                                // onClick={handleDetailsProduct}
+                            />
                         </div>
                     )}
+                    onRow={handleOnRow}
                 />
             </div>
-            <Modal title="Tạo sản phẩm" isOpen={isModalOpen} onClose={handleClose}>
+            <Modal title="Tạo sản phẩm" isOpen={isModalCreateOpen} onClose={handleCreateClose}>
                 <Form
                     name="basic"
                     labelCol={{
@@ -306,6 +425,173 @@ function AdminProduct() {
                         </Button>
                     </Form.Item>
                 </Form>
+            </Modal>
+            <Modal title="Sửa sản phẩm" isOpen={isModalUpdateOpen} onClose={handleUpdateClose}>
+                <Loading isPending={isPendingUpdate || isPendingUpdated}>
+                    <Form
+                        form={form}
+                        name="basic"
+                        labelCol={{
+                            span: 6,
+                        }}
+                        wrapperCol={{
+                            span: 18,
+                        }}
+                        style={{
+                            maxWidth: 600,
+                            fontFamily: "var(--font-family)",
+                        }}
+                        initialValues={{
+                            remember: true,
+                        }}
+                        onFinish={onFinishUpdate}
+                        autoComplete="off"
+                    >
+                        <Form.Item
+                            label="Tên sản phẩm"
+                            name="name"
+                            className={cx("custom-form-item")}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng nhập tên sản phẩm!",
+                                },
+                            ]}
+                        >
+                            <InputForm
+                                placeholder="Tên sản phẩm"
+                                className={cx("input", "spacing")}
+                                value={stateProductDetails.name}
+                                onChange={handleOnChangeDetails}
+                                name="name"
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Loại sản phẩm"
+                            name="type"
+                            className={cx("custom-form-item")}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng nhập loại sản phẩm!",
+                                },
+                            ]}
+                        >
+                            <InputForm
+                                placeholder="Loại sản phẩm"
+                                className={cx("input", "spacing")}
+                                value={stateProductDetails.type}
+                                onChange={handleOnChangeDetails}
+                                name="type"
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Số lượng"
+                            name="quantity"
+                            className={cx("custom-form-item")}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng nhập số lượng sản phẩm!",
+                                },
+                            ]}
+                        >
+                            <InputForm
+                                placeholder="Số lượng sản phẩm"
+                                type="number"
+                                className={cx("input", "spacing")}
+                                value={stateProductDetails.quantity}
+                                onChange={handleOnChangeDetails}
+                                name="quantity"
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Giá sản phẩm"
+                            name="price"
+                            className={cx("custom-form-item")}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng nhập giá sản phẩm!",
+                                },
+                            ]}
+                        >
+                            <InputForm
+                                placeholder="Giá sản phẩm"
+                                type="number"
+                                className={cx("input", "spacing")}
+                                value={stateProductDetails.price}
+                                onChange={handleOnChangeDetails}
+                                name="price"
+                            />
+                        </Form.Item>
+
+                        <Form.Item label="Giảm giá" name="discount" className={cx("custom-form-item")}>
+                            <InputForm
+                                placeholder="Giảm giá"
+                                type="number"
+                                className={cx("input", "spacing")}
+                                value={stateProductDetails.discount}
+                                onChange={handleOnChangeDetails}
+                                name="discount"
+                            />
+                        </Form.Item>
+
+                        <Form.Item label="Mô tả sản phẩm" name="description" className={cx("custom-form-item")}>
+                            <InputForm
+                                placeholder="Mô tả sản phẩm"
+                                className={cx("input", "spacing")}
+                                value={stateProductDetails.description}
+                                onChange={handleOnChangeDetails}
+                                name="description"
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Ảnh sản phẩm"
+                            name="image"
+                            className={cx("custom-form-item")}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng chọn ảnh sản phẩm!",
+                                },
+                            ]}
+                        >
+                            <div className={cx("custom-product-field")}>
+                                <Upload onChange={handleImageDetails} maxCount={1}>
+                                    <Button primary htmlType="submit">
+                                        Tải ảnh lên
+                                    </Button>
+                                </Upload>
+                                {stateProductDetails.image && (
+                                    <img
+                                        src={
+                                            stateProductDetails.image ||
+                                            "http://localhost:3000/static/media/bami-sot.9fdfa0bd114f70652ee6.png"
+                                        }
+                                        alt="Product-Image"
+                                        className={cx("image")}
+                                    />
+                                )}
+                            </div>
+                        </Form.Item>
+
+                        <Form.Item
+                            wrapperCol={{
+                                offset: 6,
+                                span: 18,
+                            }}
+                        >
+                            <Button primary className={cx("upload-btn")} onClick={form.submit}>
+                                <Loading isPending={isPendingUpdated}>Cập nhật sản phẩm</Loading>
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </Loading>
             </Modal>
         </div>
     );

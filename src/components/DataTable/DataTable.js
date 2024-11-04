@@ -8,7 +8,7 @@ import styles from "./DataTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-const DataTable = ({ data = [], columns = [], renderActions }) => {
+const DataTable = ({ data = [], columns = [], renderActions, onRow = () => {} }) => {
     const [selectedRows, setSelectedRows] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 5;
@@ -49,8 +49,12 @@ const DataTable = ({ data = [], columns = [], renderActions }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {paginatedData.map((row) => (
-                            <tr key={row.key} className={cx("data-table")}>
+                        {paginatedData.map((row, rowIndex) => (
+                            <tr
+                                key={row.key}
+                                className={cx("data-table")}
+                                onClick={(e) => onRow(row, rowIndex)?.onClick?.(e)} // Sử dụng `onRow` cho mỗi hàng
+                            >
                                 <td>
                                     <input
                                         type="checkbox"
@@ -96,6 +100,7 @@ DataTable.propTypes = {
     ),
     isPending: PropTypes.bool,
     renderActions: PropTypes.func,
+    onRow: PropTypes.func,
 };
 
 export default DataTable;

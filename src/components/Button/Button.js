@@ -10,6 +10,7 @@ function Button({
     to,
     href,
     primary,
+    htmlType,
     outline = false,
     text = false,
     rounded = false,
@@ -28,6 +29,16 @@ function Button({
         onClick,
         ...passProps,
     };
+
+    if (htmlType === "submit") {
+        // Ngăn không cho submit form
+        props.onClick = (e) => {
+            e.preventDefault();
+            onClick && onClick(e);
+        };
+    } else {
+        props.onClick = onClick;
+    }
 
     // xóa event listener khi btn bị disabled
     if (disabled) {
@@ -70,6 +81,7 @@ Button.propTypes = {
     to: PropTypes.string,
     href: PropTypes.string,
     primary: PropTypes.bool,
+    htmlType: PropTypes.string,
     outline: PropTypes.bool,
     text: PropTypes.bool,
     rounded: PropTypes.bool,
