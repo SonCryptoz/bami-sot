@@ -24,6 +24,7 @@ function AdminProduct() {
     const [form] = Form.useForm();
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [isPendingUpdate, setIsPendingUpdate] = useState(false);
     const [stateProduct, setStateProduct] = useState({
         name: "",
@@ -62,6 +63,17 @@ function AdminProduct() {
         isError: isErrorUpdated,
     } = mutationUpdate;
 
+    const mutationDelete = useMutationHook((data) => {
+        const { id, token } = data;
+        return ProductService.deleteProduct(id, token);
+    });
+    const {
+        data: dataDeleted,
+        isPending: isPendingDeleted,
+        isSuccess: isSuccessDeleted,
+        isError: isErrorDeleted,
+    } = mutationDelete;
+
     useEffect(() => {
         if (isSuccess && data?.status === "success") {
             handleCreateClose();
@@ -80,16 +92,26 @@ function AdminProduct() {
         }
     }, [dataUpdated, isSuccessUpdated, isErrorUpdated]);
 
+    useEffect(() => {
+        if (isSuccessDeleted && dataDeleted?.status === "success") {
+            handleDeleteClose();
+            message.success("Xóa sản phẩm thành công");
+        } else if (isErrorDeleted) {
+            message.error("Xóa sản phẩm thất bại");
+        }
+    }, [dataDeleted, isSuccessDeleted, isErrorDeleted]);
+
     const fetchAllProducts = async () => {
         const res = await ProductService.getAllProducts();
         return res;
     };
 
     // Sử dụng useQuery để fetch dữ liệu sản phẩm
-    const { data: products } = useQuery({
+    const queryProduct = useQuery({
         queryKey: ["products"],
         queryFn: fetchAllProducts,
     });
+    const { data: products } = queryProduct;
 
     const openModal = () => setIsModalCreateOpen(true);
     const handleCreateClose = () => {
@@ -101,12 +123,38 @@ function AdminProduct() {
         setIsModalUpdateOpen(false);
     };
 
+    const handleDeleteClose = () => {
+        setIsModalDeleteOpen(false);
+    };
+
     const onFinish = () => {
-        mutation.mutate(stateProduct);
+        mutation.mutate(stateProduct, {
+            onSettled: () => {
+                queryProduct.refetch();
+            },
+        });
     };
 
     const onFinishUpdate = () => {
-        mutationUpdate.mutate({ id: rowSelected, token: user?.access_token, ...stateProductDetails });
+        mutationUpdate.mutate(
+            { id: rowSelected, token: user?.access_token, ...stateProductDetails },
+            {
+                onSettled: () => {
+                    queryProduct.refetch();
+                },
+            },
+        );
+    };
+
+    const handleDeleteProduct = () => {
+        mutationDelete.mutate(
+            { id: rowSelected, token: user?.access_token },
+            {
+                onSettled: () => {
+                    queryProduct.refetch();
+                },
+            },
+        );
     };
 
     const handleOnChange = (e) => {
@@ -191,15 +239,12 @@ function AdminProduct() {
 
     useEffect(() => {
         if (rowSelected) {
+            setIsPendingUpdate(true);
             fetchAllDetailsProduct(rowSelected);
         }
     }, [rowSelected]);
 
     const handleDetailsProduct = () => {
-        if (rowSelected) {
-            setIsPendingUpdate(true);
-            fetchAllDetailsProduct(rowSelected);
-        }
         setIsModalUpdateOpen(true);
     };
 
@@ -239,7 +284,7 @@ function AdminProduct() {
                             <FontAwesomeIcon
                                 icon={faTrash}
                                 style={{ cursor: "pointer", color: "#ff2a00" }}
-                                // onClick={handleDetailsProduct}
+                                onClick={() => setIsModalDeleteOpen(true)}
                             />
                         </div>
                     )}
@@ -586,11 +631,22 @@ function AdminProduct() {
                                 span: 18,
                             }}
                         >
-                            <Button primary className={cx("upload-btn")} onClick={form.submit}>
-                                <Loading isPending={isPendingUpdated}>Cập nhật sản phẩm</Loading>
+                            <Button primary className={cx("upload-btn")}>
+                                <Loading isPending={isPendingUpdated}>Sửa sản phẩm</Loading>
                             </Button>
                         </Form.Item>
                     </Form>
+                </Loading>
+            </Modal>
+            <Modal
+                title="Xóa sản phẩm"
+                isOpen={isModalDeleteOpen}
+                onClose={handleDeleteClose}
+                onOk={handleDeleteProduct}
+                displayOk={true}
+            >
+                <Loading isPending={isPendingDeleted}>
+                    <span>Bạn có muốn xóa sản phẩm này không</span>
                 </Loading>
             </Modal>
         </div>

@@ -31,11 +31,9 @@ function Home() {
                 ))}
             </div>
             <div className={cx("button")}>
-                <Loading isPending={isPending}>
-                    <Button primary className={cx("more-button")}>
-                        Xem thêm
-                    </Button>
-                </Loading>
+                <Button primary className={cx("more-button")}>
+                    <Loading isPending={isPending}>Xem thêm</Loading>
+                </Button>
             </div>
             <div className={cx("pagination")}>
                 <Pagination defaultCurrent={1} total={products?.total || 0} onChange={onChange} />

@@ -7,7 +7,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
-function Modal({ title, isOpen, onClose, onOk, children }) {
+function Modal({ title, isOpen, onClose, onOk, displayOk = false, children }) {
     if (!isOpen) return null; // Nếu modal đóng, không hiển thị gì cả
 
     return (
@@ -24,9 +24,11 @@ function Modal({ title, isOpen, onClose, onOk, children }) {
                     <button className={cx("btn")} onClick={onClose}>
                         Hủy
                     </button>
-                    {/* <button className={cx("btn", "primary-btn")} onClick={onOk}>
-                        OK
-                    </button> */}
+                    {displayOk && (
+                        <button className={cx("btn", "primary-btn")} onClick={onOk}>
+                            OK
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
