@@ -9,19 +9,21 @@ import styles from "./AdminProduct.module.scss";
 import Button from "../Button";
 import DataTable from "../DataTable";
 import Modal from "../Modal";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import InputForm from "../InputForm";
 import { getBase64 } from "@/utils";
 import * as ProductService from "@/services/ProductService";
 import { useMutationHook } from "@/hooks/useMutationHook";
 import Loading from "../Loading";
 import * as message from "@/components/Message/message";
+import Search from "@/components/Search";
 
 const cx = classNames.bind(styles);
 
 function AdminProduct() {
     const user = useSelector((state) => state?.user);
     const [form] = Form.useForm();
+    const [searchTerm, setSearchTerm] = useState("");
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
@@ -114,6 +116,11 @@ function AdminProduct() {
     const { data: products } = queryProduct;
 
     const openModal = () => setIsModalCreateOpen(true);
+
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+    };
+
     const handleCreateClose = () => {
         setIsModalCreateOpen(false);
         setStateProduct({ name: "", image: "", type: "", quantity: 0, price: 0, discount: 0, description: "" });
@@ -250,15 +257,35 @@ function AdminProduct() {
 
     const productColumns = [
         { key: "name", title: "Tên sản phẩm", dataIndex: "name" },
-        { key: "type", title: "Loại sản phẩm", dataIndex: "type" },
-        { key: "price", title: "Giá sản phẩm", dataIndex: "price" },
+        {
+            key: "type",
+            title: "Loại ",
+            dataIndex: "type",
+            filters: [
+                { text: "Loại F", value: "Football Player" },
+                { text: "Loại s", value: "s" },
+                // Thêm các loại khác nếu cần
+            ],
+        },
+        {
+            key: "quantity",
+            title: "Số lượng ",
+            dataIndex: "quantity",
+            filters: [
+                { text: "Dưới 50", value: "under50" },
+                { text: "Trên 50", value: "over50" },
+            ],
+        },
+        { key: "price", title: "Giá bán", dataIndex: "price" },
     ];
 
-    const productDataWithKeys =
-        products?.data.map((product) => ({
-            ...product,
-            key: product._id,
-        })) || [];
+    // Lọc dữ liệu sản phẩm dựa trên từ khóa tìm kiếm
+    const filteredProducts = useMemo(() => {
+        if (!searchTerm) return products?.data.map((product) => ({ ...product, key: product._id })) || [];
+        return products?.data
+            .filter((product) => product.name.toLowerCase().includes(searchTerm.toLowerCase()))
+            .map((product) => ({ ...product, key: product._id }));
+    }, [products, searchTerm]);
 
     return (
         <div className={cx("wrapper")}>
@@ -270,20 +297,23 @@ function AdminProduct() {
                     <FontAwesomeIcon icon={faAdd} style={{ fontSize: "40px" }} />
                 </Button>
             </div>
+            <div className={cx("search-wrapper")}>
+                <Search onSearch={handleSearch} />
+            </div>
             <div className={cx("table-data")}>
                 <DataTable
-                    data={productDataWithKeys}
+                    data={filteredProducts}
                     columns={productColumns}
                     renderActions={(row) => (
                         <div className={cx("action-icon")}>
                             <FontAwesomeIcon
                                 icon={faPen}
-                                style={{ cursor: "pointer" }}
+                                className={cx("update-icon")}
                                 onClick={handleDetailsProduct}
                             />
                             <FontAwesomeIcon
                                 icon={faTrash}
-                                style={{ cursor: "pointer", color: "#ff2a00" }}
+                                className={cx("delete-icon")}
                                 onClick={() => setIsModalDeleteOpen(true)}
                             />
                         </div>
@@ -646,7 +676,7 @@ function AdminProduct() {
                 displayOk={true}
             >
                 <Loading isPending={isPendingDeleted}>
-                    <span>Bạn có muốn xóa sản phẩm này không</span>
+                    <span>Bạn có muốn xóa sản phẩm này không?</span>
                 </Loading>
             </Modal>
         </div>

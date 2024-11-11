@@ -1,11 +1,19 @@
 .wrapper {
+    --search-border-radius: 50px;
+    --search-height: 38px;
+    --search-btn-width: 46px;
+
     .btn-wrapper {
-        margin-top: 10px;
+        margin-bottom: 10px;
 
         .btn-add {
             height: 100px;
             width: 100px;
         }
+    }
+
+    .search-wrapper {
+        width: auto;
     }
 
     .table-data {
@@ -14,6 +22,21 @@
             display: flex;
             justify-content: space-between;
             font-size: 1.8rem;
+
+            .update-icon {
+                cursor: pointer;
+                &:active {
+                    color: var(--primary);
+                }
+            }
+
+            .delete-icon {
+                cursor: pointer;
+                color: #ff1818;
+                &:active {
+                    color: #ff6118;
+                }
+            }
         }
     }
 

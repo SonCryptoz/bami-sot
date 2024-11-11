@@ -13,6 +13,22 @@
     border-collapse: collapse;
     margin-top: 10px;
 
+    .sort {
+        cursor: pointer;
+        &:active {
+            color: var(--primary);
+        }
+    }
+
+    .option-filter,
+    option {
+        font-family: var(--font-family);
+        font-weight: 600;
+        color: var(--text-color);
+        border: 1px solid var(--text-color);
+        border-radius: 5px;
+    }
+
     tr {
         transition: linear 0.2s;
     }
@@ -22,33 +38,6 @@
         padding: 12px;
         text-align: left;
         border-bottom: calc(0.5px) solid #ccc;
-    }
-
-    /* Thiết lập chiều rộng của từng cột */
-    th:nth-child(1),
-    td:nth-child(1) {
-        /* Cột checkbox */
-        width: 5%;
-    }
-
-    th:nth-child(2),
-    td:nth-child(2) {
-        width: 50%;
-    }
-
-    th:nth-child(3),
-    td:nth-child(3) {
-        width: 15%;
-    }
-
-    th:nth-child(4),
-    td:nth-child(4) {
-        width: 15%;
-    }
-
-    th:nth-child(5),
-    td:nth-child(5) {
-        width: 20%;
     }
 
     thead {
@@ -71,7 +60,6 @@
 .pagination {
     display: flex;
     justify-content: flex-end;
-    margin-top: 10px;
     gap: 8px;
 
     .page {

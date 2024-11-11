@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import Search from "../Search";
+import Search from "../../../components/Search";
 import config from "@/config";
 import styles from "./Header.module.scss";
 import HeaderTop from "./HeaderTop";
