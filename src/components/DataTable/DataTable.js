@@ -29,6 +29,13 @@ const DataTable = ({ data = [], columns = [], renderActions, onRow = () => {} })
                     } else if (filters[key] === "over50") {
                         return row[key] >= 50; // Trên 50
                     }
+                } else if (key === "isAdmin") {
+                    // So sánh với chuỗi "True" hoặc "False"
+                    if (filters[key] === "True") {
+                        return row[key] === "True";
+                    } else if (filters[key] === "False") {
+                        return row[key] === "False";
+                    }
                 }
 
                 // Các cột khác nếu có bộ lọc khác

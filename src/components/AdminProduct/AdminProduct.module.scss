@@ -18,7 +18,7 @@
 
     .table-data {
         .action-icon {
-            width: 35%;
+            width: 40%;
             display: flex;
             justify-content: space-between;
             font-size: 1.8rem;
@@ -38,41 +38,6 @@
                 }
             }
         }
-    }
-
-    .custom-modal .ant-modal-content {
-        background-color: #f0f0f0; /* Đặt màu nền cho modal */
-        border-radius: 10px; /* Bo tròn các góc của modal */
-    }
-
-    .custom-modal .ant-modal-header {
-        background-color: #1890ff; /* Đặt màu nền cho header */
-        color: white; /* Màu chữ cho header */
-        font-size: 18px; /* Kích thước chữ cho tiêu đề */
-    }
-
-    .custom-modal .ant-modal-title {
-        font-weight: bold;
-    }
-
-    .custom-modal .ant-modal-body {
-        padding: 24px; /* Căn lề cho nội dung */
-        color: #333;
-    }
-
-    .custom-modal .ant-modal-footer {
-        display: flex;
-        justify-content: flex-end; /* Canh các nút sang bên phải */
-        gap: 10px; /* Khoảng cách giữa các nút */
-    }
-
-    .custom-modal .ant-btn-primary {
-        background-color: #ff6d18; /* Đổi màu cho nút chính */
-        border-color: #ff6d18;
-    }
-
-    .custom-modal .ant-btn {
-        border-radius: 5px; /* Bo tròn các nút */
     }
 
     .input {

@@ -1,10 +1,101 @@
 .wrapper {
-    .btn-wrapper {
-        margin-bottom: 10px;
+    --search-border-radius: 50px;
+    --search-height: 38px;
+    --search-btn-width: 46px;
 
-        .btn-add {
-            height: 100px;
-            width: 100px;
+    .search-wrapper {
+        margin-top: 20px;
+        width: auto;
+    }
+
+    .table-data {
+        .action-icon {
+            width: 50%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.8rem;
+
+            .update-icon {
+                cursor: pointer;
+                &:active {
+                    color: var(--primary);
+                }
+            }
+
+            .delete-icon {
+                cursor: pointer;
+                color: #ff1818;
+                &:active {
+                    color: #ff6118;
+                }
+            }
         }
+    }
+
+    .input {
+        border-radius: 50px;
+        height: 36px;
+        padding-right: 20px;
+        color: var(--text-color);
+        font-weight: 600;
+        caret-color: var(--primary);
+        font-family: var(--font-family);
+        border-color: var(--primary);
+
+        &:focus {
+            box-shadow: none;
+        }
+
+        &:focus-within {
+            border-color: var(--section-color);
+        }
+
+        &:hover {
+            border: 1px solid var(--section-color);
+        }
+    }
+
+    .image {
+        width: 68px;
+        height: 68px;
+        border-radius: 10px;
+        border: 2px solid var(--primary);
+    }
+
+    .custom-product-field {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .upload-btn {
+        width: 100%;
+    }
+}
+
+:global {
+    .custom-form-item .ant-form-item-label > label {
+        color: var(--text-color);
+        font-size: 1.8rem;
+        font-family: var(--font-family);
+    }
+
+    .ant-form-item .ant-form-item-explain-error {
+        font-family: var(--font-family);
+        font-size: 1.4rem;
+    }
+
+    .ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
+        display: none;
+    }
+
+    .ant-upload-wrapper .ant-upload-list .ant-upload-list-item-error {
+        display: none;
+    }
+
+    .custom-radio {
+        color: var(--text-color);
+        font-weight: 600;
+        font-family: var(--font-family);
     }
 }

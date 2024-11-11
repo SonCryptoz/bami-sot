@@ -7,7 +7,7 @@ import styles from "./Search.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Search({ onSearch }) {
+function Search({ onSearch, placeholder }) {
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleInputChange = (e) => {
@@ -24,7 +24,7 @@ function Search({ onSearch }) {
         <div className={cx("wrapper")}>
             <div className={cx("search")}>
                 <input
-                    placeholder="Tìm kiếm bánh mỳ, đồ uống..."
+                    placeholder={placeholder || "Search"}
                     spellCheck={false}
                     value={searchTerm}
                     onChange={handleInputChange}

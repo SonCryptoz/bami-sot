@@ -298,7 +298,7 @@ function AdminProduct() {
                 </Button>
             </div>
             <div className={cx("search-wrapper")}>
-                <Search onSearch={handleSearch} />
+                <Search onSearch={handleSearch} placeholder="Tìm kiếm bánh mỳ, đồ uống..." />
             </div>
             <div className={cx("table-data")}>
                 <DataTable
