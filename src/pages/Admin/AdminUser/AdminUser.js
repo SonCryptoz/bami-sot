@@ -6,15 +6,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./AdminUser.module.scss";
-import Button from "../Button";
-import DataTable from "../DataTable";
-import Modal from "../Modal";
+import Button from "../../../components/Button";
+import DataTable from "../../../components/DataTable";
+import Modal from "../../../components/Modal";
 import { useEffect, useMemo, useState } from "react";
-import InputForm from "../InputForm";
+import InputForm from "../../../components/InputForm";
 import { getBase64 } from "@/utils";
 import * as UserService from "@/services/UserService";
 import { useMutationHook } from "@/hooks/useMutationHook";
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 import * as message from "@/components/Message/message";
 import Search from "@/components/Search";
 
