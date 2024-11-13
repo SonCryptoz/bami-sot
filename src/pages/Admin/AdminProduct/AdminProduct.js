@@ -6,15 +6,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./AdminProduct.module.scss";
-import Button from "../Button";
-import DataTable from "../DataTable";
-import Modal from "../Modal";
+import Button from "@/components/Button";
+import DataTable from "@/components/DataTable";
+import Modal from "@/components/Modal";
 import { useEffect, useMemo, useState } from "react";
-import InputForm from "../InputForm";
+import InputForm from "@/components/InputForm";
 import { getBase64 } from "@/utils";
 import * as ProductService from "@/services/ProductService";
 import { useMutationHook } from "@/hooks/useMutationHook";
-import Loading from "../Loading";
+import Loading from "@/components/Loading";
 import * as message from "@/components/Message/message";
 import Search from "@/components/Search";
 
@@ -27,6 +27,8 @@ function AdminProduct() {
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    const [isModalDeleteManyOpen, setIsModalDeleteManyOpen] = useState(false);
+    const [selectedRowsToDelete, setSelectedRowsToDelete] = useState([]);
     const [isPendingUpdate, setIsPendingUpdate] = useState(false);
     const [stateProduct, setStateProduct] = useState({
         name: "",
@@ -76,10 +78,21 @@ function AdminProduct() {
         isError: isErrorDeleted,
     } = mutationDelete;
 
+    const mutationDeleteMany = useMutationHook((data) => {
+        const { token, ...ids } = data;
+        return ProductService.deleteManyProduct(ids, token);
+    });
+    const {
+        data: dataDeletedMany,
+        isPending: isPendingDeletedMany,
+        isSuccess: isSuccessDeletedMany,
+        isError: isErrorDeletedMany,
+    } = mutationDeleteMany;
+
     useEffect(() => {
         if (isSuccess && data?.status === "success") {
-            handleCreateClose();
             message.success("Tạo sản phẩm thành công");
+            handleCreateClose();
         } else if (isError) {
             message.error("Tạo sản phẩm thất bại");
         }
@@ -87,8 +100,8 @@ function AdminProduct() {
 
     useEffect(() => {
         if (isSuccessUpdated && dataUpdated?.status === "success") {
-            handleUpdateClose();
             message.success("Cập nhật sản phẩm thành công");
+            handleUpdateClose();
         } else if (isErrorUpdated) {
             message.error("Cập nhật sản phẩm thất bại");
         }
@@ -96,12 +109,21 @@ function AdminProduct() {
 
     useEffect(() => {
         if (isSuccessDeleted && dataDeleted?.status === "success") {
-            handleDeleteClose();
             message.success("Xóa sản phẩm thành công");
+            handleDeleteClose();
         } else if (isErrorDeleted) {
             message.error("Xóa sản phẩm thất bại");
         }
     }, [dataDeleted, isSuccessDeleted, isErrorDeleted]);
+
+    useEffect(() => {
+        if (isSuccessDeletedMany && dataDeletedMany?.status === "success") {
+            message.success("Xóa sản phẩm thành công");
+            setIsModalDeleteManyOpen(false);
+        } else if (isErrorDeletedMany) {
+            message.error("Xóa sản phẩm thất bại");
+        }
+    }, [dataDeletedMany, isSuccessDeletedMany, isErrorDeletedMany]);
 
     const fetchAllProducts = async () => {
         const res = await ProductService.getAllProducts();
@@ -134,6 +156,10 @@ function AdminProduct() {
         setIsModalDeleteOpen(false);
     };
 
+    const handleDeleteManyClose = () => {
+        setIsModalDeleteManyOpen(false);
+    };
+
     const onFinish = () => {
         mutation.mutate(stateProduct, {
             onSettled: () => {
@@ -156,6 +182,17 @@ function AdminProduct() {
     const handleDeleteProduct = () => {
         mutationDelete.mutate(
             { id: rowSelected, token: user?.access_token },
+            {
+                onSettled: () => {
+                    queryProduct.refetch();
+                },
+            },
+        );
+    };
+
+    const handleDeleteManyProduct = () => {
+        mutationDeleteMany.mutate(
+            { ids: selectedRowsToDelete, token: user?.access_token },
             {
                 onSettled: () => {
                     queryProduct.refetch();
@@ -251,10 +288,6 @@ function AdminProduct() {
         }
     }, [rowSelected]);
 
-    const handleDetailsProduct = () => {
-        setIsModalUpdateOpen(true);
-    };
-
     const productColumns = [
         { key: "name", title: "Tên sản phẩm", dataIndex: "name" },
         {
@@ -309,7 +342,7 @@ function AdminProduct() {
                             <FontAwesomeIcon
                                 icon={faPen}
                                 className={cx("update-icon")}
-                                onClick={handleDetailsProduct}
+                                onClick={() => setIsModalUpdateOpen(true)}
                             />
                             <FontAwesomeIcon
                                 icon={faTrash}
@@ -318,6 +351,10 @@ function AdminProduct() {
                             />
                         </div>
                     )}
+                    handle={(ids) => {
+                        setSelectedRowsToDelete(ids);
+                        setIsModalDeleteManyOpen(true);
+                    }}
                     onRow={handleOnRow}
                 />
             </div>
@@ -677,6 +714,17 @@ function AdminProduct() {
             >
                 <Loading isPending={isPendingDeleted}>
                     <span>Bạn có muốn xóa sản phẩm này không?</span>
+                </Loading>
+            </Modal>
+            <Modal
+                title="Xóa sản phẩm"
+                isOpen={isModalDeleteManyOpen}
+                onClose={handleDeleteManyClose}
+                onOk={handleDeleteManyProduct}
+                displayOk={true}
+            >
+                <Loading isPending={isPendingDeletedMany}>
+                    <span>Bạn có muốn xóa sản phẩm đã chọn không?</span>
                 </Loading>
             </Modal>
         </div>

@@ -5,10 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight, faSort } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./DataTable.module.scss";
+import Button from "../Button";
 
 const cx = classNames.bind(styles);
 
-const DataTable = ({ data = [], columns = [], renderActions, onRow = () => {} }) => {
+const DataTable = ({ data = [], columns = [], renderActions, handle = () => {}, onRow = () => {} }) => {
     const [selectedRows, setSelectedRows] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -79,8 +80,20 @@ const DataTable = ({ data = [], columns = [], renderActions, onRow = () => {} })
 
     const handleChangePage = (pageNumber) => setCurrentPage(pageNumber);
 
+    const handleDeleteAll = () => {
+        handle(selectedRows);
+        setSelectedRows([]);
+    };
+
     return (
         <div>
+            {selectedRows.length > 0 && (
+                <div className={cx("btn-container")}>
+                    <Button primary onClick={handleDeleteAll}>
+                        Xóa tất cả
+                    </Button>
+                </div>
+            )}
             <div className={cx("table-container")}>
                 <table className={cx("custom-table")}>
                     <thead>
@@ -168,6 +181,7 @@ DataTable.propTypes = {
     ),
     isPending: PropTypes.bool,
     renderActions: PropTypes.func,
+    handle: PropTypes.func,
     onRow: PropTypes.func,
 };
 

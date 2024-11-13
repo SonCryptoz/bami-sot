@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { Form, Upload, Radio } from "antd";
+import { Form, Upload } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,12 +26,12 @@ function AdminUser() {
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    const [isModalDeleteManyOpen, setIsModalDeleteManyOpen] = useState(false);
+    const [selectedRowsToDelete, setSelectedRowsToDelete] = useState([]);
     const [isPendingUpdate, setIsPendingUpdate] = useState(false);
-
     const [stateUserDetails, setStateUserDetails] = useState({
         name: "",
         email: "",
-        isAdmin: false,
         phone: 0,
         address: "",
         avatar: "",
@@ -60,10 +60,21 @@ function AdminUser() {
         isError: isErrorDeleted,
     } = mutationDelete;
 
+    const mutationDeleteMany = useMutationHook((data) => {
+        const { token, ...ids } = data;
+        return UserService.deleteManyUser(ids, token);
+    });
+    const {
+        data: dataDeletedMany,
+        isPending: isPendingDeletedMany,
+        isSuccess: isSuccessDeletedMany,
+        isError: isErrorDeletedMany,
+    } = mutationDeleteMany;
+
     useEffect(() => {
         if (isSuccessUpdated && dataUpdated?.status === "success") {
-            handleUpdateClose();
             message.success("Cập nhật tài khoản người dùng thành công");
+            handleUpdateClose();
         } else if (isErrorUpdated) {
             message.error("Cập nhật tài khoản người dùng thất bại");
         }
@@ -71,12 +82,21 @@ function AdminUser() {
 
     useEffect(() => {
         if (isSuccessDeleted && dataDeleted?.status === "success") {
-            handleDeleteClose();
             message.success("Xóa tài khoản người dùng thành công");
-        } else if (isErrorDeleted) {
+            handleDeleteClose();
+        } else if (isErrorDeleted || dataDeleted?.status === "error") {
             message.error("Xóa tài khoản người dùng thất bại");
         }
     }, [dataDeleted, isSuccessDeleted, isErrorDeleted]);
+
+    useEffect(() => {
+        if (isSuccessDeletedMany && dataDeletedMany?.status === "success") {
+            message.success("Xóa tài khoản người dùng thành công");
+            setIsModalDeleteManyOpen(false);
+        } else if (isErrorDeletedMany || dataDeletedMany?.status === "error") {
+            message.error("Xóa tài khoản người dùng thất bại");
+        }
+    }, [dataDeletedMany, isSuccessDeletedMany, isErrorDeletedMany]);
 
     const fetchAllUsers = async () => {
         const res = await UserService.getAllUsers();
@@ -102,6 +122,10 @@ function AdminUser() {
         setIsModalDeleteOpen(false);
     };
 
+    const handleDeleteManyClose = () => {
+        setIsModalDeleteManyOpen(false);
+    };
+
     const onFinishUpdate = () => {
         mutationUpdate.mutate(
             { id: rowSelected, token: user?.access_token, ...stateUserDetails },
@@ -116,6 +140,17 @@ function AdminUser() {
     const handleDeleteUser = () => {
         mutationDelete.mutate(
             { id: rowSelected, token: user?.access_token },
+            {
+                onSettled: () => {
+                    queryUser.refetch();
+                },
+            },
+        );
+    };
+
+    const handleDeleteManyUser = () => {
+        mutationDeleteMany.mutate(
+            { ids: selectedRowsToDelete, token: user?.access_token },
             {
                 onSettled: () => {
                     queryUser.refetch();
@@ -164,7 +199,6 @@ function AdminUser() {
             setStateUserDetails({
                 name: res.data.name,
                 email: res.data.email,
-                isAdmin: res.data.isAdmin,
                 phone: res.data.phone,
                 address: res.data.address,
                 avatar: res.data.avatar,
@@ -250,6 +284,10 @@ function AdminUser() {
                             />
                         </div>
                     )}
+                    handle={(ids) => {
+                        setSelectedRowsToDelete(ids);
+                        setIsModalDeleteManyOpen(true);
+                    }}
                     onRow={handleOnRow}
                 />
             </div>
@@ -312,31 +350,6 @@ function AdminUser() {
                                 onChange={handleOnChangeDetails}
                                 name="email"
                             />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Quyền"
-                            name="isAdmin"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng chọn quyền!",
-                                },
-                            ]}
-                            className={cx("custom-form-item")}
-                        >
-                            <Radio.Group
-                                value={stateUserDetails.isAdmin}
-                                onChange={handleOnChangeDetails}
-                                name="isAdmin"
-                            >
-                                <Radio value={true} className={cx("custom-radio")}>
-                                    Admin (true)
-                                </Radio>
-                                <Radio value={false} className={cx("custom-radio")}>
-                                    User (false)
-                                </Radio>
-                            </Radio.Group>
                         </Form.Item>
 
                         <Form.Item
@@ -432,6 +445,17 @@ function AdminUser() {
             >
                 <Loading isPending={isPendingDeleted}>
                     <span>Bạn có muốn xóa tài khoản này không?</span>
+                </Loading>
+            </Modal>
+            <Modal
+                title="Xóa tài khoản người dùng"
+                isOpen={isModalDeleteManyOpen}
+                onClose={handleDeleteManyClose}
+                onOk={handleDeleteManyUser}
+                displayOk={true}
+            >
+                <Loading isPending={isPendingDeletedMany}>
+                    <span>Bạn có muốn xóa tài khoản người dùng đã chọn không?</span>
                 </Loading>
             </Modal>
         </div>
