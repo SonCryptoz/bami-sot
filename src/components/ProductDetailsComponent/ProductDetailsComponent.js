@@ -5,10 +5,13 @@ import styles from "./ProductDetailsComponent.module.scss";
 import Button from "../Button";
 import * as ProductService from "@/services/ProductService";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
 function ProductDetailsComponent({ idProduct }) {
+    const [numProduct, setNumProduct] = useState(1);
+
     const fetchAllDetailsProduct = async (context) => {
         const id = context?.queryKey && context?.queryKey[1];
         if (id) {
@@ -24,7 +27,23 @@ function ProductDetailsComponent({ idProduct }) {
         enabled: !!idProduct,
     });
 
-    const quantityChange = () => {};
+    const quantityChange = (event) => {
+        let value = Number.parseInt(event.target.value);
+        if (!value || value < 1) {
+            value = 1;
+        } else if (value > 100) {
+            value = 100;
+        }
+        setNumProduct(value);
+    };
+
+    const handleChange = (type) => {
+        if (type === "increase" && numProduct < 100) {
+            setNumProduct(numProduct + 1);
+        } else if (type === "decrease" && numProduct > 1) {
+            setNumProduct(numProduct - 1);
+        }
+    };
 
     return (
         <div>
@@ -113,16 +132,20 @@ function ProductDetailsComponent({ idProduct }) {
                         <div className={cx("quantity")}>
                             <label>SỐ LƯỢNG:</label>
                             <div className={cx("control-quantity")}>
-                                <button className={cx("button-control")}>-</button>
+                                <button className={cx("button-control")} onClick={() => handleChange("decrease")}>
+                                    -
+                                </button>
                                 <input
                                     type="number"
                                     min={1}
                                     max={10}
                                     onChange={quantityChange}
-                                    defaultValue={1}
+                                    value={numProduct}
                                     className={cx("input-control")}
                                 />
-                                <button className={cx("button-control")}>+</button>
+                                <button className={cx("button-control")} onClick={() => handleChange("increase")}>
+                                    +
+                                </button>
                             </div>
                         </div>
                         <div className={cx("buy-action")}>
@@ -139,10 +162,10 @@ function ProductDetailsComponent({ idProduct }) {
                 </div>
                 <div className={cx("content")}>
                     <div className={cx("text-img")}>
+                        <p>{productDetails?.description}</p>
                         <p>
                             <img className={cx("image")} src={productDetails?.image} alt="product-details" />
                         </p>
-                        <p>{productDetails.description}</p>
                     </div>
                 </div>
             </div>
