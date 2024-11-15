@@ -17,6 +17,7 @@ import AccountMenu from "@/components/Popper/AccountMenu";
 import { MENU_ITEM, ACCOUNT_ITEM } from "./Item";
 import * as UserService from "@/services/UserService";
 import { resetUser } from "@/redux/slices/userSlice";
+import { searchProduct } from "@/redux/slices/productSlice";
 import { useState } from "react";
 import Loading from "@/components/Loading";
 
@@ -24,6 +25,9 @@ const cx = classNames.bind(styles);
 
 function Header({ isHiddenSearchBar = false, isHiddenCart = false }) {
     const [loading, setLoading] = useState(false);
+
+    // eslint-disable-next-line
+    const [searchTerm, setSearchTerm] = useState("");
 
     const user = useSelector((state) => state.user);
 
@@ -64,6 +68,11 @@ function Header({ isHiddenSearchBar = false, isHiddenCart = false }) {
         </div>
     );
 
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+        dispatch(searchProduct(term));
+    };
+
     return (
         <div className={cx("wrapper")}>
             <div className={cx("set-background")}>
@@ -97,7 +106,9 @@ function Header({ isHiddenSearchBar = false, isHiddenCart = false }) {
                     </div>
                 </div>
                 <div className={cx("right-header")}>
-                    {!isHiddenSearchBar && <Search />}
+                    {!isHiddenSearchBar && (
+                        <Search onSearch={handleSearch} placeholder="Tìm kiếm bánh mỳ, đồ uóng..." />
+                    )}
                     <div className={cx("cart-account")}>
                         {!isHiddenCart && (
                             <Link to={config.routes.cart}>

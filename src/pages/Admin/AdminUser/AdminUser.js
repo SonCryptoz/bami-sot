@@ -246,7 +246,7 @@ function AdminUser() {
     const filteredUsers = useMemo(() => {
         if (!searchTerm) {
             return (
-                users?.data.map((user) => ({
+                users?.data?.map((user) => ({
                     ...user,
                     key: user._id,
                     isAdmin: user.isAdmin ? "True" : "False", // Chuyển đổi boolean thành chuỗi

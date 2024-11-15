@@ -314,7 +314,7 @@ function AdminProduct() {
 
     // Lọc dữ liệu sản phẩm dựa trên từ khóa tìm kiếm
     const filteredProducts = useMemo(() => {
-        if (!searchTerm) return products?.data.map((product) => ({ ...product, key: product._id })) || [];
+        if (!searchTerm) return products?.data?.map((product) => ({ ...product, key: product._id })) || [];
         return products?.data
             .filter((product) => product.name.toLowerCase().includes(searchTerm.toLowerCase()))
             .map((product) => ({ ...product, key: product._id }));

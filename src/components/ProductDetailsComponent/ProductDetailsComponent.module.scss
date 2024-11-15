@@ -134,6 +134,13 @@
             align-items: center;
             justify-content: center;
 
+            .image {
+                width: 100%;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+
             p {
                 text-align: justify;
                 margin-bottom: 15px;

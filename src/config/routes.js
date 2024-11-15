@@ -10,7 +10,7 @@ const routes = {
         cakeProduct: "/product/cake",
         softDrinkProduct: "/product/soft-drink",
     },
-    productDetails: "/product-details",
+    productDetails: "/product-details/:id",
     introduction: "/introduction",
     contact: "/contact",
     profile: "/profile",

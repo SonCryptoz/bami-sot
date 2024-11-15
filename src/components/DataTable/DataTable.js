@@ -3,6 +3,8 @@ import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight, faSort } from "@fortawesome/free-solid-svg-icons";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 import styles from "./DataTable.module.scss";
 import Button from "../Button";
@@ -85,15 +87,41 @@ const DataTable = ({ data = [], columns = [], renderActions, handle = () => {}, 
         setSelectedRows([]);
     };
 
+    const exportToExcel = () => {
+        // Loại bỏ các trường không mong muốn
+        const sanitizedData = filteredData.map((row) => {
+            return Object.fromEntries(
+                Object.entries(row).filter(
+                    ([key]) => !["_id", "password", "__v", "avatar", "image", "key"].includes(key),
+                ),
+            );
+        });
+
+        // Tạo worksheet từ dữ liệu
+        const worksheet = XLSX.utils.json_to_sheet(sanitizedData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+        // Xuất file với định dạng .xlsx
+        const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+        const dataBlob = new Blob([excelBuffer], { type: "application/octet-stream" });
+        saveAs(dataBlob, "data.xlsx");
+    };
+
     return (
         <div>
             {selectedRows.length > 0 && (
                 <div className={cx("btn-container")}>
-                    <Button primary onClick={handleDeleteAll}>
+                    <Button primary onClick={handleDeleteAll} className={cx("custom-deleteAll-btn")}>
                         Xóa tất cả
                     </Button>
                 </div>
             )}
+            <div className={cx("export-btn")}>
+                <Button onClick={exportToExcel} primary>
+                    Xuất sang Excel
+                </Button>
+            </div>
             <div className={cx("table-container")}>
                 <table className={cx("custom-table")}>
                     <thead>
@@ -144,7 +172,14 @@ const DataTable = ({ data = [], columns = [], renderActions, handle = () => {}, 
                                     />
                                 </td>
                                 {columns.map((col) => (
-                                    <td key={col.key}>{row[col.dataIndex]}</td>
+                                    <td key={col.key}>
+                                        {col.key === "price"
+                                            ? row[col.dataIndex].toLocaleString("vi-VN", {
+                                                  style: "currency",
+                                                  currency: "VND",
+                                              })
+                                            : row[col.dataIndex]}
+                                    </td>
                                 ))}
                                 {renderActions && <td>{renderActions(row)}</td>}
                             </tr>
