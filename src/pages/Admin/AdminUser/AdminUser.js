@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import styles from "./AdminUser.module.scss";
 import Button from "../../../components/Button";
@@ -126,7 +128,23 @@ function AdminUser() {
         setIsModalDeleteManyOpen(false);
     };
 
+    const validateUserDetails = () => {
+        const phoneRegex = /^[0-9]{10,11}$/;
+        if (!phoneRegex.test(stateUserDetails.phone)) {
+            toast.error("Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng.");
+            return false;
+        }
+
+        return true; // Trả về true nếu tất cả hợp lệ
+    };
+
     const onFinishUpdate = () => {
+        // Validate trước khi mutate
+        if (!validateUserDetails()) {
+            return; // Dừng lại nếu dữ liệu không hợp lệ
+        }
+
+        // Thực hiện mutate nếu validate thành công
         mutationUpdate.mutate(
             { id: rowSelected, token: user?.access_token, ...stateUserDetails },
             {
@@ -160,9 +178,10 @@ function AdminUser() {
     };
 
     const handleOnChangeDetails = (e) => {
+        const { name, value } = e.target;
         setStateUserDetails({
             ...stateUserDetails,
-            [e.target.name]: e.target.value,
+            [name]: value,
         });
     };
 
@@ -372,6 +391,7 @@ function AdminUser() {
                                 name="phone"
                             />
                         </Form.Item>
+                        <ToastContainer />
 
                         <Form.Item
                             label="Địa chỉ"

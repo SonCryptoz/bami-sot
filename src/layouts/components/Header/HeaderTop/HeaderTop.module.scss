@@ -25,8 +25,11 @@
 }
 
 .logo-link {
-    height: 100px;
-    width: 100px;
+    width: 150px;
+    height: 150px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     cursor: pointer;
 }
 

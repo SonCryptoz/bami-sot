@@ -1,0 +1,14 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    max-width: 100%;
+
+    .cart {
+        width: var(--default-layout-width);
+        height: auto;
+        max-width: 100%;
+        padding: 0 var(--default-layout-horizontal-spacer);
+    }
+}

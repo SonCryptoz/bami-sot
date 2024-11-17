@@ -5,10 +5,8 @@ import Home from "@/pages/Home";
 import Order from "@/pages/Order";
 import Product from "@/pages/Product";
 import NewProduct from "@/pages/Product/NewProduct";
-import BreadProduct from "@/pages/Product/BreadProduct";
-import CakeProduct from "@/pages/Product/CakeProduct";
-import SoftDrinkProduct from "@/pages/Product/SoftDrinkProduct";
 import PromotionProduct from "@/pages/Product/PromotionProduct";
+import TypeProduct from "@/pages/Product/TypeProduct";
 import ProductDetails from "@/pages/ProductDetails";
 import Introduction from "@/pages/Introduction";
 import Contact from "@/pages/Contact";
@@ -29,24 +27,16 @@ const publicRoutes = [
         component: Order,
     },
     {
+        path: config.routes.productType,
+        component: TypeProduct,
+    },
+    {
         path: config.routes.product.product,
         component: Product,
     },
     {
         path: config.routes.product.newProduct,
         component: NewProduct,
-    },
-    {
-        path: config.routes.product.breadProduct,
-        component: BreadProduct,
-    },
-    {
-        path: config.routes.product.cakeProduct,
-        component: CakeProduct,
-    },
-    {
-        path: config.routes.product.softDrinkProduct,
-        component: SoftDrinkProduct,
     },
     {
         path: config.routes.product.promotionProduct,
@@ -58,7 +48,7 @@ const publicRoutes = [
     },
     {
         path: config.routes.productDetails,
-        component: ProductDetails,
+        component: ProductDetails, 
         layout: null,
     },
     {
@@ -68,6 +58,7 @@ const publicRoutes = [
     {
         path: config.routes.cart,
         component: Cart,
+        layout: null,
     },
     {
         path: config.routes.login,

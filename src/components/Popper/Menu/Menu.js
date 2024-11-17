@@ -10,9 +10,7 @@ const cx = classNames.bind(styles);
 
 function Menu({ children, items = [], hideOnClick = false, ...passProps }) {
     const renderItems = () => {
-        return items.map((item, index) => (
-            <MenuItem key={index} data={item} /> // Thêm onClick để ẩn Tippy khi click
-        ));
+        return items.map((item, index) => <MenuItem key={index} data={item} />);
     };
 
     const renderResult = (attrs) => {

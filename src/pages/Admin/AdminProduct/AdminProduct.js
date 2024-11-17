@@ -38,6 +38,7 @@ function AdminProduct() {
         price: 0,
         discount: 0,
         description: "",
+        newType: "",
     });
     const [stateProductDetails, setStateProductDetails] = useState({
         name: "",
@@ -130,12 +131,23 @@ function AdminProduct() {
         return res;
     };
 
+    const fetchAllProductTypes = async () => {
+        const res = await ProductService.getAllTypeProducts();
+        return res;
+    };
+
     // Sử dụng useQuery để fetch dữ liệu sản phẩm
     const queryProduct = useQuery({
         queryKey: ["products"],
         queryFn: fetchAllProducts,
     });
     const { data: products } = queryProduct;
+
+    const queryProductTypes = useQuery({
+        queryKey: ["type-product"],
+        queryFn: fetchAllProductTypes,
+    });
+    const { data: productTypes } = queryProductTypes;
 
     const openModal = () => setIsModalCreateOpen(true);
 
@@ -161,9 +173,20 @@ function AdminProduct() {
     };
 
     const onFinish = () => {
-        mutation.mutate(stateProduct, {
+        const newType = stateProduct.type === "more" ? stateProduct.newType : stateProduct.type;
+        const params = {
+            name: stateProduct.name,
+            image: stateProduct.image,
+            type: newType,
+            quantity: stateProduct.quantity,
+            price: stateProduct.price,
+            discount: stateProduct.discount,
+            description: stateProduct.description,
+        };
+        mutation.mutate(params, {
             onSettled: () => {
                 queryProduct.refetch();
+                queryProductTypes.refetch();
             },
         });
     };
@@ -174,6 +197,7 @@ function AdminProduct() {
             {
                 onSettled: () => {
                     queryProduct.refetch();
+                    queryProductTypes.refetch();
                 },
             },
         );
@@ -185,6 +209,7 @@ function AdminProduct() {
             {
                 onSettled: () => {
                     queryProduct.refetch();
+                    queryProductTypes.refetch();
                 },
             },
         );
@@ -196,6 +221,7 @@ function AdminProduct() {
             {
                 onSettled: () => {
                     queryProduct.refetch();
+                    queryProductTypes.refetch();
                 },
             },
         );
@@ -205,6 +231,14 @@ function AdminProduct() {
         setStateProduct({
             ...stateProduct,
             [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleOnChangeSelect = (e) => {
+        const value = e.target.value;
+        setStateProduct({
+            ...stateProduct,
+            type: value,
         });
     };
 
@@ -294,11 +328,11 @@ function AdminProduct() {
             key: "type",
             title: "Loại ",
             dataIndex: "type",
-            filters: [
-                { text: "Loại F", value: "Football Player" },
-                { text: "Loại s", value: "s" },
-                // Thêm các loại khác nếu cần
-            ],
+            filters:
+                productTypes?.data?.map((option) => ({
+                    text: option,
+                    value: option,
+                })) || [],
         },
         {
             key: "quantity",
@@ -314,8 +348,10 @@ function AdminProduct() {
 
     // Lọc dữ liệu sản phẩm dựa trên từ khóa tìm kiếm
     const filteredProducts = useMemo(() => {
-        if (!searchTerm) return products?.data?.map((product) => ({ ...product, key: product._id })) || [];
-        return products?.data
+        if (!products?.data) return []; // Trả về mảng rỗng nếu không có dữ liệu
+        if (!searchTerm) return products.data.map((product) => ({ ...product, key: product._id }));
+
+        return products.data
             .filter((product) => product.name.toLowerCase().includes(searchTerm.toLowerCase()))
             .map((product) => ({ ...product, key: product._id }));
     }, [products, searchTerm]);
@@ -390,7 +426,7 @@ function AdminProduct() {
                     >
                         <InputForm
                             placeholder="Tên sản phẩm"
-                            className={cx("input", "spacing")}
+                            className={cx("input")}
                             value={stateProduct.name}
                             onChange={handleOnChange}
                             name="name"
@@ -403,18 +439,44 @@ function AdminProduct() {
                         rules={[
                             {
                                 required: true,
-                                message: "Vui lòng nhập loại sản phẩm!",
+                                message: "Vui lòng chọn loại sản phẩm!",
                             },
                         ]}
                         className={cx("custom-form-item")}
                     >
-                        <InputForm
-                            placeholder="Loại sản phẩm"
-                            className={cx("input", "spacing")}
-                            value={stateProduct.type}
-                            onChange={handleOnChange}
-                            name="type"
-                        />
+                        <div className={cx("spacing-type")}>
+                            <select name="type" onChange={handleOnChangeSelect} className={cx("input")}>
+                                <option value="">Chọn loại</option>
+                                {productTypes?.data?.map((option, index) => (
+                                    <option key={index} value={option}>
+                                        {option}
+                                    </option>
+                                ))}
+                                <option key="10" value="more">
+                                    Thêm
+                                </option>
+                            </select>
+                            {stateProduct.type === "more" && (
+                                <Form.Item
+                                    name="newType"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Vui lòng nhập loại sản phẩm!",
+                                        },
+                                    ]}
+                                    className={cx("custom-form-item")}
+                                >
+                                    <InputForm
+                                        placeholder="Loại sản phẩm"
+                                        className={cx("input", "spacing")}
+                                        value={stateProduct.newType}
+                                        onChange={handleOnChange}
+                                        name="newType"
+                                    />
+                                </Form.Item>
+                            )}
+                        </div>
                     </Form.Item>
 
                     <Form.Item
@@ -434,6 +496,7 @@ function AdminProduct() {
                             className={cx("input", "spacing")}
                             value={stateProduct.quantity}
                             onChange={handleOnChange}
+                            min={1}
                             name="quantity"
                         />
                     </Form.Item>
@@ -455,6 +518,7 @@ function AdminProduct() {
                             className={cx("input", "spacing")}
                             value={stateProduct.price}
                             onChange={handleOnChange}
+                            min={1}
                             name="price"
                         />
                     </Form.Item>
@@ -475,6 +539,7 @@ function AdminProduct() {
                             className={cx("input", "spacing")}
                             value={stateProduct.discount}
                             onChange={handleOnChange}
+                            min={0}
                             name="discount"
                         />
                     </Form.Item>
@@ -590,13 +655,13 @@ function AdminProduct() {
                                 },
                             ]}
                         >
-                            <InputForm
-                                placeholder="Loại sản phẩm"
-                                className={cx("input", "spacing")}
-                                value={stateProductDetails.type}
-                                onChange={handleOnChangeDetails}
-                                name="type"
-                            />
+                            <select name="type" onChange={handleOnChangeDetails} className={cx("input")}>
+                                {productTypes?.data?.map((option, index) => (
+                                    <option key={index} value={option}>
+                                        {option}
+                                    </option>
+                                ))}
+                            </select>
                         </Form.Item>
 
                         <Form.Item
@@ -616,6 +681,7 @@ function AdminProduct() {
                                 className={cx("input", "spacing")}
                                 value={stateProductDetails.quantity}
                                 onChange={handleOnChangeDetails}
+                                min={1}
                                 name="quantity"
                             />
                         </Form.Item>
@@ -637,6 +703,7 @@ function AdminProduct() {
                                 className={cx("input", "spacing")}
                                 value={stateProductDetails.price}
                                 onChange={handleOnChangeDetails}
+                                min={1}
                                 name="price"
                             />
                         </Form.Item>
@@ -648,6 +715,7 @@ function AdminProduct() {
                                 className={cx("input", "spacing")}
                                 value={stateProductDetails.discount}
                                 onChange={handleOnChangeDetails}
+                                min={0}
                                 name="discount"
                             />
                         </Form.Item>

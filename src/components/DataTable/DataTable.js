@@ -24,8 +24,7 @@ const DataTable = ({ data = [], columns = [], renderActions, handle = () => {}, 
         return data.filter((row) => {
             return Object.keys(filters).every((key) => {
                 if (!filters[key]) return true; // Không có bộ lọc thì hiển thị tất cả
-
-                if (key === "quantity") {
+                else if (key === "quantity") {
                     // Lọc dữ liệu theo số lượng
                     if (filters[key] === "under50") {
                         return row[key] < 50; // Dưới 50
@@ -195,7 +194,7 @@ const DataTable = ({ data = [], columns = [], renderActions, handle = () => {}, 
                     </div>
                     <button
                         onClick={() => handleChangePage(currentPage + 1)}
-                        disabled={currentPage * rowsPerPage >= data.length}
+                        disabled={currentPage * rowsPerPage >= filteredData.length}
                     >
                         <FontAwesomeIcon icon={faArrowRight} />
                     </button>

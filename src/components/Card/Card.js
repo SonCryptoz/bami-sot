@@ -1,6 +1,7 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 
+import routes from "@/config/routes";
 import styles from "./Card.module.scss";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +10,7 @@ const cx = classNames.bind(styles);
 function CardItem({ product, id }) {
     const navigate = useNavigate();
     const handleDetailsProduct = (id) => {
-        navigate("/product-details/" + id);
+        navigate(routes.productDetails.replace(":id", id));
     };
 
     return (

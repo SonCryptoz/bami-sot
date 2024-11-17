@@ -13,6 +13,20 @@ export const getAllProducts = async (value, limitPage) => {
     return res.data;
 };
 
+export const getProductsType = async (type, limitPage) => {
+    if (type) {
+        const res = await axios.get(
+            `${process.env.REACT_APP_API_URL}/product/get-all-products?filter=type&filter=${type}&items=${limitPage}`,
+        );
+        return res.data;
+    }
+};
+
+export const getAllTypeProducts = async () => {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all-types`);
+    return res.data;
+};
+
 export const getDetailsProduct = async (id) => {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-details-product/${id}`);
     return res.data;

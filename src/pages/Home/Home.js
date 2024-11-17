@@ -1,14 +1,14 @@
 import classNames from "classnames/bind";
-import styles from "./Home.module.scss";
-import CardItem from "@/components/Card/Card";
-import Button from "@/components/Button";
 import { Pagination } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import * as ProductService from "@/services/ProductService";
-import Loading from "@/components/Loading";
 import { useSelector } from "react-redux";
 import { useRef, useState } from "react";
 import { useDebounceHook } from "@/hooks/useDebounceHook";
+
+import styles from "./Home.module.scss";
+import CardItem from "@/components/Card/Card";
+import Button from "@/components/Button";
+import * as ProductService from "@/services/ProductService";
 
 const cx = classNames.bind(styles);
 
@@ -17,10 +17,10 @@ function Home() {
     const searchDebounce = useDebounceHook(searchProductValue, 500);
     const refSearch = useRef(true);
 
-    const [limitPage, setLimitPage] = useState(3);
+    const [limitPage, setLimitPage] = useState(6);
 
     // Sử dụng useQuery để fetch dữ liệu sản phẩm
-    const { isPending, data: products } = useQuery({
+    const { data: products } = useQuery({
         queryKey: ["products", searchDebounce, limitPage],
         queryFn: () => ProductService.getAllProducts(searchDebounce, limitPage),
         enabled: !!searchDebounce || refSearch.current,
@@ -46,7 +46,7 @@ function Home() {
                     onClick={() => setLimitPage((prev) => prev + 3)}
                     disabled={products?.total === products?.data?.length || products?.totalPages === 1}
                 >
-                    <Loading isPending={isPending}>Xem thêm</Loading>
+                    Xem thêm
                 </Button>
             </div>
             <div className={cx("pagination")}>
