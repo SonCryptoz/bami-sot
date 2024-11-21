@@ -6,17 +6,27 @@ import Button from "../Button";
 import * as ProductService from "@/services/ProductService";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { addOrderProduct } from "@/redux/slices/orderSlice";
 
 const cx = classNames.bind(styles);
 
 function ProductDetailsComponent({ idProduct }) {
+    const user = useSelector((state) => state.user);
+    const { pathname } = useLocation();
+
     const [numProduct, setNumProduct] = useState(1);
+
+    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
 
     const fetchAllDetailsProduct = async (context) => {
         const id = context?.queryKey && context?.queryKey[1];
         if (id) {
             const res = await ProductService.getDetailsProduct(id);
-            return res.data;
+            return res?.data;
         }
     };
 
@@ -42,6 +52,24 @@ function ProductDetailsComponent({ idProduct }) {
             setNumProduct(numProduct + 1);
         } else if (type === "decrease" && numProduct > 1) {
             setNumProduct(numProduct - 1);
+        }
+    };
+
+    const addToCart = () => {
+        if (!user?.id) {
+            navigate("/login", { state: pathname });
+        } else {
+            dispatch(
+                addOrderProduct({
+                    orderItem: {
+                        name: productDetails?.name,
+                        amount: numProduct,
+                        image: productDetails?.image,
+                        price: productDetails?.price,
+                        product: productDetails._id,
+                    },
+                }),
+            );
         }
     };
 
@@ -138,7 +166,7 @@ function ProductDetailsComponent({ idProduct }) {
                                 <input
                                     type="number"
                                     min={1}
-                                    max={10}
+                                    max={100}
                                     onChange={quantityChange}
                                     value={numProduct}
                                     className={cx("input-control")}
@@ -149,7 +177,7 @@ function ProductDetailsComponent({ idProduct }) {
                             </div>
                         </div>
                         <div className={cx("buy-action")}>
-                            <Button primary className={cx("button-buy")}>
+                            <Button primary className={cx("button-buy")} onClick={addToCart}>
                                 Mua hàng
                             </Button>
                         </div>

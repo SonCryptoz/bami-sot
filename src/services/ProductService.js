@@ -13,10 +13,10 @@ export const getAllProducts = async (value, limitPage) => {
     return res.data;
 };
 
-export const getProductsType = async (type, limitPage) => {
+export const getProductsType = async (type, page, limitPage) => {
     if (type) {
         const res = await axios.get(
-            `${process.env.REACT_APP_API_URL}/product/get-all-products?filter=type&filter=${type}&items=${limitPage}`,
+            `${process.env.REACT_APP_API_URL}/product/get-all-products?filter=type&filter=${type}&items=${limitPage}&page=${page}`,
         );
         return res.data;
     }

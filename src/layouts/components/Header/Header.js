@@ -31,6 +31,8 @@ function Header({ isHiddenSearchBar = false, isHiddenCart = false }) {
 
     const user = useSelector((state) => state.user);
 
+    const order = useSelector((state) => state.order);
+
     const navigate = useNavigate();
     const handleLogin = () => {
         navigate("/login");
@@ -112,7 +114,7 @@ function Header({ isHiddenSearchBar = false, isHiddenCart = false }) {
                     <div className={cx("cart-account")}>
                         {!isHiddenCart && (
                             <Link to={config.routes.cart}>
-                                <Badge count={4} size="small" color="var(--primary)">
+                                <Badge count={order?.orderItems?.length} size="small">
                                     <FontAwesomeIcon icon={faShoppingBasket} className={cx("cart-icon")} />
                                 </Badge>
                             </Link>

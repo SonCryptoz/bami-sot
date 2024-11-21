@@ -20,7 +20,7 @@ function ProductDetails() {
         const _id = context?.queryKey && context?.queryKey[1];
         if (_id) {
             const res = await ProductService.getDetailsProduct(_id);
-            return res.data;
+            return res?.data;
         }
     };
 
@@ -38,9 +38,9 @@ function ProductDetails() {
             <div className={cy("product-details")}>
                 <div className={cy("breadcrumb")}>
                     <Link to="/">
-                        <span>Trang chủ</span>
+                        <span>Trang chủ </span>
                     </Link>
-                    <span> / Chi tiết sản phẩm</span>
+                    / Chi tiết sản phẩm
                 </div>
                 <ProductDetailsComponent idProduct={id} />
             </div>

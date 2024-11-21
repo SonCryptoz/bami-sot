@@ -40,6 +40,19 @@ body {
 
 // scrollbar css
 
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
 //
 button,
 input,

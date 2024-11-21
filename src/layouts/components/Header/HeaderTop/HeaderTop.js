@@ -47,7 +47,7 @@ function HeaderTop() {
                             <FontAwesomeIcon icon={faPhone} style={{ width: "20px", height: "20px" }} />
                         </div>
                         <div className={cx("content")}>
-                            <span className={cx("title")}>Contact us</span>
+                            <span className={cx("title")}>Contact</span>
                             <div className={cx("info")}>
                                 <a href="tel:0987654321">0987654321</a>
                             </div>

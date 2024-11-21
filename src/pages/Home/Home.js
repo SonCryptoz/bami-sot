@@ -13,11 +13,16 @@ import * as ProductService from "@/services/ProductService";
 const cx = classNames.bind(styles);
 
 function Home() {
-    const searchProductValue = useSelector((state) => state.product.search);
+    const searchProductValue = useSelector((state) => state?.product?.search);
     const searchDebounce = useDebounceHook(searchProductValue, 500);
     const refSearch = useRef(true);
 
     const [limitPage, setLimitPage] = useState(6);
+    // const [paginate, setPaginate] = useState({
+    //     page: 1,
+    //     limitPage: 6,
+    //     total: 1,
+    // });
 
     // Sử dụng useQuery để fetch dữ liệu sản phẩm
     const { data: products } = useQuery({
@@ -29,7 +34,6 @@ function Home() {
             refSearch.current = true;
         },
     });
-
     const onChange = () => {};
 
     return (
@@ -43,7 +47,7 @@ function Home() {
                 <Button
                     primary
                     className={cx("more-button")}
-                    onClick={() => setLimitPage((prev) => prev + 3)}
+                    onClick={() => setLimitPage((prev) => prev + 6)}
                     disabled={products?.total === products?.data?.length || products?.totalPages === 1}
                 >
                     Xem thêm

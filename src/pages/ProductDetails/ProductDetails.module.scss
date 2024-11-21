@@ -10,10 +10,10 @@
         margin-bottom: 30px;
         border-bottom: 1px solid #ddd;
         font-size: 2rem;
+        font-weight: 500;
 
         span {
             transition: linear 0.2s;
-            font-weight: 500;
 
             &:hover {
                 color: var(--primary);

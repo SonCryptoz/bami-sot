@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import { Image } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
@@ -19,6 +19,8 @@ import { updateUser } from "@/redux/slices/userSlice";
 const cx = classNames.bind(styles);
 
 function Login() {
+    const location = useLocation();
+
     const [showPassword, setShowPassword] = useState(false);
 
     const [email, setEmail] = useState("");
@@ -60,7 +62,11 @@ function Login() {
                 if (decoded?.id) {
                     try {
                         await handleGetDetailsUser(decoded.id, data.access_token); // Đợi lấy thông tin người dùng
-                        navigate("/"); // Chỉ điều hướng sau khi lấy thông tin thành công
+                        if (location?.state) {
+                            navigate(location?.state);
+                        } else {
+                            navigate("/"); // Chỉ điều hướng sau khi lấy thông tin thành công
+                        }
                     } catch (error) {
                         console.error("Failed to fetch user details", error);
                     }
@@ -71,7 +77,7 @@ function Login() {
         if (isSuccess) {
             handleLoginSuccess(); // Gọi hàm xử lý logic đăng nhập thành công
         }
-    }, [isSuccess, data, handleGetDetailsUser, navigate]);
+    }, [isSuccess, data, handleGetDetailsUser, navigate, location]);
 
     const handleLogin = () => {
         mutation.mutate({
