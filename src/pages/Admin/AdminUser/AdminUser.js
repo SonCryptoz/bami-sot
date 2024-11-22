@@ -227,7 +227,7 @@ function AdminUser() {
     };
 
     useEffect(() => {
-        form.setFieldsValue(stateUserDetails);
+        form.setFieldsValue({ ...stateUserDetails });
     }, [form, stateUserDetails]);
 
     useEffect(() => {

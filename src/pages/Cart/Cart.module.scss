@@ -96,6 +96,24 @@
     }
 }
 
+.empty-cart {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .empty-title {
+        display: flex;
+        align-items: center;
+        flex: 1;
+    }
+
+    .empty-icon {
+        flex: 2;
+    }
+}
+
 .cart-table th,
 .cart-table td {
     text-align: left;

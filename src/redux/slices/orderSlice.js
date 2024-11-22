@@ -31,22 +31,43 @@ export const orderSlice = createSlice({
         increaseAmount: (state, action) => {
             const { idProduct } = action.payload;
             const itemOrder = state.orderItems.find((item) => item?.product === idProduct);
-            itemOrder.amount++;
+            if (itemOrder) {
+                itemOrder.amount++;
+            }
         },
         decreaseAmount: (state, action) => {
             const { idProduct } = action.payload;
             const itemOrder = state.orderItems.find((item) => item?.product === idProduct);
-            itemOrder.amount--;
+            if (itemOrder && itemOrder.amount > 1) {
+                itemOrder.amount--;
+            }
+        },
+        updateAmount: (state, action) => {
+            const { idProduct, amount } = action.payload;
+            const itemOrder = state.orderItems.find((item) => item?.product === idProduct);
+            if (itemOrder) {
+                itemOrder.amount = amount;
+            }
         },
         removeOrderProduct: (state, action) => {
             const { idProduct } = action.payload;
-            const itemOrder = state.orderItems.find((item) => item?.product !== idProduct);
-            itemOrder.orderItems = itemOrder;
+            state.orderItems = state.orderItems.filter((item) => item?.product !== idProduct);
+        },
+        removeAllOrdersProduct: (state, action) => {
+            const { cartChecked } = action.payload;
+            state.orderItems = state.orderItems.filter((item) => !cartChecked.includes(item.product));
         },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { addOrderProduct } = orderSlice.actions;
+export const {
+    addOrderProduct,
+    increaseAmount,
+    decreaseAmount,
+    updateAmount,
+    removeOrderProduct,
+    removeAllOrdersProduct,
+} = orderSlice.actions;
 
 export default orderSlice.reducer;

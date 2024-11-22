@@ -27,6 +27,7 @@
 
 html {
     font-size: 62.5%;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -45,12 +46,8 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-thumb {
-    background: #ccc;
+    background: var(--section-color);
     border-radius: 4px;
-}
-
-body::-webkit-scrollbar-thumb:hover {
-    background: #aaa;
 }
 
 //

@@ -1,13 +1,14 @@
 import classNames from "classnames/bind";
 import { Col, Row, Image } from "antd";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 import styles from "./ProductDetailsComponent.module.scss";
 import Button from "../Button";
 import * as ProductService from "@/services/ProductService";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import * as message from "@/components/Message/message";
 import { addOrderProduct } from "@/redux/slices/orderSlice";
 
 const cx = classNames.bind(styles);
@@ -70,6 +71,7 @@ function ProductDetailsComponent({ idProduct }) {
                     },
                 }),
             );
+            message.success(`Đã thêm ${numProduct} ${productDetails?.name} vào giỏ hàng`);
         }
     };
 

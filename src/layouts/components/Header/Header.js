@@ -59,6 +59,7 @@ function Header({ isHiddenSearchBar = false, isHiddenCart = false }) {
             </p>
             {user?.isAdmin && (
                 <p
+                    style={{ borderBottom: "1px solid #e6e6e6" }}
                     onClick={() => {
                         navigate("/system/admin");
                     }}
