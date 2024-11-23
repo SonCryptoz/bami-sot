@@ -358,9 +358,7 @@ function AdminProduct() {
 
     return (
         <div className={cx("wrapper")}>
-            <div>
-                <h2>Quản lý sản phẩm</h2>
-            </div>
+            <h1 className={cx("title")}>Quản lý sản phẩm</h1>
             <div className={cx("btn-wrapper")}>
                 <Button primary className={cx("btn-add")} onClick={openModal}>
                     <FontAwesomeIcon icon={faAdd} style={{ fontSize: "40px" }} />

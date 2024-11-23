@@ -10,6 +10,7 @@ import Button from "../Button";
 import * as ProductService from "@/services/ProductService";
 import * as message from "@/components/Message/message";
 import { addOrderProduct } from "@/redux/slices/orderSlice";
+import Loading from "../Loading";
 
 const cx = classNames.bind(styles);
 
@@ -32,7 +33,7 @@ function ProductDetailsComponent({ idProduct }) {
     };
 
     // Sử dụng useQuery để fetch dữ liệu sản phẩm
-    const { data: productDetails } = useQuery({
+    const { data: productDetails, isPending: productDetailsPending } = useQuery({
         queryKey: ["product-details", idProduct],
         queryFn: fetchAllDetailsProduct,
         enabled: !!idProduct,
@@ -76,130 +77,132 @@ function ProductDetailsComponent({ idProduct }) {
     };
 
     return (
-        <div>
-            <Row>
-                <Col span={12} style={{ display: "flex", flexDirection: "column" }}>
-                    <Image
-                        src={productDetails?.image}
-                        alt="image product"
-                        preview={false}
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            border: "1px solid var(--section-color)",
-                            borderRadius: "10px",
-                        }}
-                    />
-                    <Row style={{ paddingTop: "10px", display: "flex", justifyContent: "space-around" }}>
-                        <Col span={6} style={{ flexBasis: "unset" }}>
-                            <Image
-                                src={productDetails?.image}
-                                alt="image product"
-                                preview={false}
-                                style={{
-                                    width: "100px",
-                                    height: "100px",
-                                    border: "1px solid var(--section-color)",
-                                    borderRadius: "10px",
-                                }}
-                            />
-                        </Col>
-                        <Col span={6} style={{ flexBasis: "unset" }}>
-                            <Image
-                                src={productDetails?.image}
-                                alt="image product"
-                                preview={false}
-                                style={{
-                                    width: "100px",
-                                    height: "100px",
-                                    border: "1px solid var(--section-color)",
-                                    borderRadius: "10px",
-                                }}
-                            />
-                        </Col>
-                        <Col span={6} style={{ flexBasis: "unset" }}>
-                            <Image
-                                src={productDetails?.image}
-                                alt="image product"
-                                preview={false}
-                                style={{
-                                    width: "100px",
-                                    height: "100px",
-                                    border: "1px solid var(--section-color)",
-                                    borderRadius: "10px",
-                                }}
-                            />
-                        </Col>
-                        <Col span={6} style={{ flexBasis: "unset" }}>
-                            <Image
-                                src={productDetails?.image}
-                                alt="image product"
-                                preview={false}
-                                style={{
-                                    width: "100px",
-                                    height: "100px",
-                                    border: "1px solid var(--section-color)",
-                                    borderRadius: "10px",
-                                }}
-                            />
-                        </Col>
-                    </Row>
-                </Col>
-                <Col span={12}>
-                    <div className={cx("product")}>
-                        <h1 className={cx("title")}>{productDetails?.name}</h1>
-                        <div className={cx("price-describe")}>
-                            <div className={cx("price")}>
-                                <span>{productDetails?.price.toLocaleString("vi-VN")} ₫</span>
-                            </div>
-                            <div className={cx("describe")}>
-                                <span>Mô tả ngắn</span>
-                                <div>
-                                    <em>(Đang cập nhật)</em>
+        <Loading isPending={productDetailsPending}>
+            <div>
+                <Row>
+                    <Col span={12} style={{ display: "flex", flexDirection: "column" }}>
+                        <Image
+                            src={productDetails?.image}
+                            alt="image product"
+                            preview={false}
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                border: "1px solid var(--section-color)",
+                                borderRadius: "10px",
+                            }}
+                        />
+                        <Row style={{ paddingTop: "10px", display: "flex", justifyContent: "space-around" }}>
+                            <Col span={6} style={{ flexBasis: "unset" }}>
+                                <Image
+                                    src={productDetails?.image}
+                                    alt="image product"
+                                    preview={false}
+                                    style={{
+                                        width: "100px",
+                                        height: "100px",
+                                        border: "1px solid var(--section-color)",
+                                        borderRadius: "10px",
+                                    }}
+                                />
+                            </Col>
+                            <Col span={6} style={{ flexBasis: "unset" }}>
+                                <Image
+                                    src={productDetails?.image}
+                                    alt="image product"
+                                    preview={false}
+                                    style={{
+                                        width: "100px",
+                                        height: "100px",
+                                        border: "1px solid var(--section-color)",
+                                        borderRadius: "10px",
+                                    }}
+                                />
+                            </Col>
+                            <Col span={6} style={{ flexBasis: "unset" }}>
+                                <Image
+                                    src={productDetails?.image}
+                                    alt="image product"
+                                    preview={false}
+                                    style={{
+                                        width: "100px",
+                                        height: "100px",
+                                        border: "1px solid var(--section-color)",
+                                        borderRadius: "10px",
+                                    }}
+                                />
+                            </Col>
+                            <Col span={6} style={{ flexBasis: "unset" }}>
+                                <Image
+                                    src={productDetails?.image}
+                                    alt="image product"
+                                    preview={false}
+                                    style={{
+                                        width: "100px",
+                                        height: "100px",
+                                        border: "1px solid var(--section-color)",
+                                        borderRadius: "10px",
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col span={12}>
+                        <div className={cx("product")}>
+                            <h1 className={cx("title")}>{productDetails?.name}</h1>
+                            <div className={cx("price-describe")}>
+                                <div className={cx("price")}>
+                                    <span>{productDetails?.price.toLocaleString("vi-VN")} ₫</span>
+                                </div>
+                                <div className={cx("describe")}>
+                                    <span>Mô tả ngắn</span>
+                                    <div>
+                                        <em>(Đang cập nhật)</em>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className={cx("quantity")}>
-                            <label>SỐ LƯỢNG:</label>
-                            <div className={cx("control-quantity")}>
-                                <button className={cx("button-control")} onClick={() => handleChange("decrease")}>
-                                    -
-                                </button>
-                                <input
-                                    type="number"
-                                    min={1}
-                                    max={100}
-                                    onChange={quantityChange}
-                                    value={numProduct}
-                                    className={cx("input-control")}
-                                />
-                                <button className={cx("button-control")} onClick={() => handleChange("increase")}>
-                                    +
-                                </button>
+                            <div className={cx("quantity")}>
+                                <label>SỐ LƯỢNG:</label>
+                                <div className={cx("control-quantity")}>
+                                    <button className={cx("button-control")} onClick={() => handleChange("decrease")}>
+                                        -
+                                    </button>
+                                    <input
+                                        type="number"
+                                        min={1}
+                                        max={100}
+                                        onChange={quantityChange}
+                                        value={numProduct}
+                                        className={cx("input-control")}
+                                    />
+                                    <button className={cx("button-control")} onClick={() => handleChange("increase")}>
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                            <div className={cx("buy-action")}>
+                                <Button primary className={cx("button-buy")} onClick={addToCart}>
+                                    Mua hàng
+                                </Button>
                             </div>
                         </div>
-                        <div className={cx("buy-action")}>
-                            <Button primary className={cx("button-buy")} onClick={addToCart}>
-                                Mua hàng
-                            </Button>
-                        </div>
+                    </Col>
+                </Row>
+                <div className={cx("product-description")}>
+                    <div className={cx("description")}>
+                        <span>Mô tả sản phẩm</span>
                     </div>
-                </Col>
-            </Row>
-            <div className={cx("product-description")}>
-                <div className={cx("description")}>
-                    <span>Mô tả sản phẩm</span>
-                </div>
-                <div className={cx("content")}>
-                    <div className={cx("text-img")}>
-                        <p>{productDetails?.description}</p>
-                        <p>
-                            <img className={cx("image")} src={productDetails?.image} alt="product-details" />
-                        </p>
+                    <div className={cx("content")}>
+                        <div className={cx("text-img")}>
+                            <p>{productDetails?.description}</p>
+                            <p>
+                                <img className={cx("image")} src={productDetails?.image} alt="product-details" />
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Loading>
     );
 }
 

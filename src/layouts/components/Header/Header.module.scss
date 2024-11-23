@@ -73,6 +73,11 @@
         .cart-icon {
             color: var(--text-color);
             cursor: pointer;
+            transition: linear 0.15s;
+
+            &:active {
+                color: var(--primary);
+            }
         }
 
         .username {

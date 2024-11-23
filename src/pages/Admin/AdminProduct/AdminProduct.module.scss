@@ -3,9 +3,14 @@
     --search-height: 38px;
     --search-btn-width: 46px;
 
+    .title {
+        width: 100%;
+        padding: 20px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
     .btn-wrapper {
-        margin-top: 20px;
-        margin-bottom: 10px;
+        margin: 10px 0;
 
         .btn-add {
             height: 100px;

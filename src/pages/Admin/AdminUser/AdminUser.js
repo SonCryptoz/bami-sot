@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import { Form, Upload } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast, ToastContainer } from "react-toastify";
@@ -19,11 +19,13 @@ import { useMutationHook } from "@/hooks/useMutationHook";
 import Loading from "../../../components/Loading";
 import * as message from "@/components/Message/message";
 import Search from "@/components/Search";
+import { updateUser } from "@/redux/slices/userSlice";
 
 const cx = classNames.bind(styles);
 
 function AdminUser() {
     const user = useSelector((state) => state?.user);
+    const dispatch = useDispatch();
     const [form] = Form.useForm();
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
@@ -139,15 +141,20 @@ function AdminUser() {
     };
 
     const onFinishUpdate = () => {
-        // Validate trước khi mutate
         if (!validateUserDetails()) {
-            return; // Dừng lại nếu dữ liệu không hợp lệ
+            return;
         }
 
-        // Thực hiện mutate nếu validate thành công
         mutationUpdate.mutate(
             { id: rowSelected, token: user?.access_token, ...stateUserDetails },
             {
+                onSuccess: (data) => {
+                    if (data?.status === "success") {
+                        if (rowSelected === user?.id) {
+                            dispatch(updateUser(stateUserDetails));
+                        }
+                    }
+                },
                 onSettled: () => {
                     queryUser.refetch();
                 },
@@ -283,9 +290,7 @@ function AdminUser() {
 
     return (
         <div className={cx("wrapper")}>
-            <div>
-                <h2>Quản lý tài khoản người dùng</h2>
-            </div>
+            <h1 className={cx("title")}>Quản lý tài khoản người dùng</h1>
             <div className={cx("search-wrapper")}>
                 <Search onSearch={handleSearch} placeholder="Tìm kiếm tên tài khoản" />
             </div>

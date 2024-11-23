@@ -91,7 +91,7 @@ function Cart() {
         <div className={cx("wrapper")}>
             <Header />
             <div className={cx("container")}>
-                <h1 className={cx("cart-link")}>Giỏ hàng</h1>
+                <h1 className={cx("cart-title")}>Giỏ hàng</h1>
                 <div className={cx("cart")}>
                     <div className={cx("cart-table-container")}>
                         {order?.orderItems?.length !== 0 ? (

@@ -92,7 +92,7 @@ function Profile() {
             <Header />
             <div className={cx("container")}>
                 <div className={cx("content")}>
-                    <h1>Thông tin người dùng</h1>
+                    <h1 className={cx("profile-title")}>Thông tin người dùng</h1>
                     <div className={cx("user")}>
                         <div className={cx("profile")}>
                             <div className={cx("profile-left")}>
