@@ -62,11 +62,7 @@ function Login() {
                 if (decoded?.id) {
                     try {
                         await handleGetDetailsUser(decoded.id, data.access_token); // Đợi lấy thông tin người dùng
-                        if (location?.state) {
-                            navigate(location?.state);
-                        } else {
-                            navigate("/"); // Chỉ điều hướng sau khi lấy thông tin thành công
-                        }
+                        navigate(location?.state || "/"); // Điều hướng chỉ khi hoàn thành
                     } catch (error) {
                         console.error("Failed to fetch user details", error);
                     }

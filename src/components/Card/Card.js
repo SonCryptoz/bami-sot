@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import routes from "@/config/routes";
 import styles from "./Card.module.scss";
 import { useNavigate } from "react-router-dom";
+import { convertPrice } from "@/utils";
 
 const cx = classNames.bind(styles);
 
@@ -23,12 +24,7 @@ function CardItem({ product, id }) {
             <div className={cx("product-info")}>
                 <h3 className={cx("name")}>{product.name}</h3>
                 <div className={cx("price")}>
-                    <span className={cx("current-price")}>
-                        {product.price.toLocaleString("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                        })}
-                    </span>
+                    <span className={cx("current-price")}>{convertPrice(product.price)}</span>
                     <span className={cx("old-price")}>{product.discount || 0} %</span>
                 </div>
             </div>

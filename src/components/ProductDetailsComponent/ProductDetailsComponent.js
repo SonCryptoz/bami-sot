@@ -11,6 +11,7 @@ import * as ProductService from "@/services/ProductService";
 import * as message from "@/components/Message/message";
 import { addOrderProduct } from "@/redux/slices/orderSlice";
 import Loading from "../Loading";
+import { convertPrice } from "@/utils";
 
 const cx = classNames.bind(styles);
 
@@ -152,7 +153,7 @@ function ProductDetailsComponent({ idProduct }) {
                             <h1 className={cx("title")}>{productDetails?.name}</h1>
                             <div className={cx("price-describe")}>
                                 <div className={cx("price")}>
-                                    <span>{productDetails?.price.toLocaleString("vi-VN")} ₫</span>
+                                    <span>{convertPrice(productDetails?.price)}</span>
                                 </div>
                                 <div className={cx("describe")}>
                                     <span>Mô tả ngắn</span>

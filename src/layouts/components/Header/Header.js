@@ -59,7 +59,6 @@ function Header({ isHiddenSearchBar = false, isHiddenCart = false }) {
             </p>
             {user?.isAdmin && (
                 <p
-                    style={{ borderBottom: "1px solid #e6e6e6" }}
                     onClick={() => {
                         navigate("/system/admin");
                     }}
@@ -67,7 +66,9 @@ function Header({ isHiddenSearchBar = false, isHiddenCart = false }) {
                     Quản lý hệ thống
                 </p>
             )}
-            <p onClick={handleLogout}>Đăng xuất</p>
+            <p style={{ borderTop: "1px solid #e6e6e6" }} onClick={handleLogout}>
+                Đăng xuất
+            </p>
         </div>
     );
 

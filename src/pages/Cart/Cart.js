@@ -15,7 +15,8 @@ import {
     removeOrderProduct,
     removeAllOrdersProduct,
 } from "@/redux/slices/orderSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { convertPrice } from "@/utils";
 
 const cx = classNames.bind(styles);
 
@@ -80,6 +81,35 @@ function Cart() {
         }
     }, [order?.orderItems, cartChecked]);
 
+    const priceMemo = useMemo(() => {
+        const result = order?.orderItems?.reduce((total, current) => {
+            return total + current.price * current.amount;
+        }, 0);
+        return result;
+    }, [order]);
+
+    const discountMemo = useMemo(() => {
+        const result = order?.orderItems?.reduce((total, current) => {
+            return total + current.discount * current.amount;
+        }, 0);
+        if (result) return result;
+        return 0;
+    }, [order]);
+
+    const deliveryMemo = useMemo(() => {
+        if (priceMemo < 200000) {
+            return 10000;
+        } else if (priceMemo > 200000 && priceMemo < 1000000) {
+            return 25000;
+        } else {
+            return 50000;
+        }
+    }, [priceMemo]);
+
+    const totalPriceMemo = useMemo(() => {
+        return priceMemo * (1 - discountMemo / 100) + deliveryMemo;
+    }, [priceMemo, discountMemo, deliveryMemo]);
+
     const handleDeleteOrders = () => {
         if (cartChecked?.length > 0) {
             dispatch(removeAllOrdersProduct({ cartChecked }));
@@ -137,12 +167,7 @@ function Cart() {
                                                 </Checkbox>
                                             </td>
                                             <td>{order?.name}</td>
-                                            <td>
-                                                {order?.price.toLocaleString("vi-VN", {
-                                                    style: "currency",
-                                                    currency: "VND",
-                                                })}
-                                            </td>
+                                            <td>{convertPrice(order?.price)}</td>
                                             <td>
                                                 <div className={cx("control-quantity")}>
                                                     <button
@@ -167,12 +192,7 @@ function Cart() {
                                                     </button>
                                                 </div>
                                             </td>
-                                            <td>
-                                                {(order?.price * order?.amount).toLocaleString("vi-VN", {
-                                                    style: "currency",
-                                                    currency: "VND",
-                                                })}
-                                            </td>
+                                            <td>{convertPrice(order?.price * order?.amount)}</td>
                                             <td>
                                                 <FontAwesomeIcon
                                                     icon={faTrash}
@@ -199,19 +219,19 @@ function Cart() {
                         <h2 className={cx("summary-title")}>Tóm tắt đơn hàng</h2>
                         <div className={cx("summary-item")}>
                             <span>Tổng tiền hàng:</span>
-                            <span>200.000 đ</span>
+                            <span>{convertPrice(priceMemo)}</span>
                         </div>
                         <div className={cx("summary-item")}>
                             <span>Giảm giá:</span>
-                            <span>0 đ</span>
+                            <span>{discountMemo} %</span>
                         </div>
                         <div className={cx("summary-item")}>
                             <span>Phí vận chuyển:</span>
-                            <span>30.000 đ</span>
+                            <span>{convertPrice(deliveryMemo)}</span>
                         </div>
                         <div className={cx("summary-total")}>
                             <span>Tổng thanh toán:</span>
-                            <span>230.000 đ</span>
+                            <span style={{ color: "#ff7700" }}>{convertPrice(totalPriceMemo)}</span>
                         </div>
                         <Button primary className={cx("checkout-button")}>
                             Tiến hành thanh toán
