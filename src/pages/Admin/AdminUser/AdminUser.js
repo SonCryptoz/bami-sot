@@ -4,8 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import styles from "./AdminUser.module.scss";
 import Button from "../../../components/Button";
@@ -38,6 +36,7 @@ function AdminUser() {
         email: "",
         phone: 0,
         address: "",
+        city: "",
         avatar: "",
     });
     const [rowSelected, setRowSelected] = useState("");
@@ -133,7 +132,7 @@ function AdminUser() {
     const validateUserDetails = () => {
         const phoneRegex = /^[0-9]{10,11}$/;
         if (!phoneRegex.test(stateUserDetails.phone)) {
-            toast.error("Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng.");
+            message.error("Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng.");
             return false;
         }
 
@@ -227,6 +226,7 @@ function AdminUser() {
                 email: res.data.email,
                 phone: res.data.phone,
                 address: res.data.address,
+                city: res.data.city,
                 avatar: res.data.avatar,
             });
         }
@@ -389,14 +389,13 @@ function AdminUser() {
                         >
                             <InputForm
                                 placeholder="+84"
-                                type="number"
+                                type="text"
                                 className={cx("input", "spacing")}
                                 value={stateUserDetails.phone}
                                 onChange={handleOnChangeDetails}
                                 name="phone"
                             />
                         </Form.Item>
-                        <ToastContainer />
 
                         <Form.Item
                             label="Địa chỉ"
@@ -415,6 +414,26 @@ function AdminUser() {
                                 value={stateUserDetails.address}
                                 onChange={handleOnChangeDetails}
                                 name="address"
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Thành phố"
+                            name="city"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng nhập tên thành phố!",
+                                },
+                            ]}
+                            className={cx("custom-form-item")}
+                        >
+                            <InputForm
+                                placeholder="TP. HCM..."
+                                className={cx("input", "spacing")}
+                                value={stateUserDetails.address}
+                                onChange={handleOnChangeDetails}
+                                name="city"
                             />
                         </Form.Item>
 

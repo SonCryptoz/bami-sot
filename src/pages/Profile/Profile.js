@@ -27,6 +27,7 @@ function Profile() {
     const [email, setEmail] = useState(user?.email);
     const [phone, setPhone] = useState(user?.phone);
     const [address, setAddress] = useState(user?.address);
+    const [city, setCity] = useState(user?.city);
     const [avatar, setAvatar] = useState(user?.avatar);
 
     useEffect(() => {
@@ -35,6 +36,7 @@ function Profile() {
             setEmail(user?.email);
             setPhone(user?.phone);
             setAddress(user?.address);
+            setCity(user?.city);
             setAvatar(user?.avatar);
         }
     }, [user]);
@@ -43,6 +45,7 @@ function Profile() {
     const handleEmail = (e) => setEmail(e.target.value);
     const handlePhone = (e) => setPhone(e.target.value);
     const handleAddress = (e) => setAddress(e.target.value);
+    const handleCity = (e) => setCity(e.target.value);
 
     const handleAvatar = async (info) => {
         const { fileList } = info;
@@ -84,7 +87,7 @@ function Profile() {
     }, [isSuccess, isError, user?.id, user?.access_token, handleGetDetailsUser]);
 
     const handleUpdate = () => {
-        mutation.mutate({ id: user?.id, name, email, phone, address, avatar, access_token: user?.access_token });
+        mutation.mutate({ id: user?.id, name, email, phone, address, avatar, city, access_token: user?.access_token });
     };
 
     return (
@@ -98,31 +101,38 @@ function Profile() {
                             <div className={cx("profile-left")}>
                                 <h4>Tên tài khoản</h4>
                                 <InputForm
-                                    placeholder="Your name"
+                                    placeholder="Tên tài khoản"
                                     className={cx("input", "spacing")}
                                     value={name}
                                     onChange={handleName}
                                 />
                                 <h4>Email</h4>
                                 <InputForm
-                                    placeholder="Your email"
+                                    placeholder="Email"
                                     className={cx("input", "spacing")}
                                     value={email}
                                     onChange={handleEmail}
                                 />
                                 <h4>Số điện thoại</h4>
                                 <InputForm
-                                    placeholder="Your phone number"
+                                    placeholder="+84"
                                     className={cx("input", "spacing")}
                                     value={phone}
                                     onChange={handlePhone}
                                 />
                                 <h4>Địa chỉ</h4>
                                 <InputForm
-                                    placeholder="Your address"
+                                    placeholder="123 Quang Trung"
                                     className={cx("input", "spacing")}
                                     value={address}
                                     onChange={handleAddress}
+                                />
+                                <h4>Thành phố</h4>
+                                <InputForm
+                                    placeholder="Ha Noi"
+                                    className={cx("input", "spacing")}
+                                    value={city}
+                                    onChange={handleCity}
                                 />
                             </div>
                             <div className={cx("profile-right")}>
