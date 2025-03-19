@@ -25,6 +25,7 @@ const publicRoutes = [
     {
         path: config.routes.order,
         component: Order,
+        layout: null,
     },
     {
         path: config.routes.productType,
@@ -48,7 +49,7 @@ const publicRoutes = [
     },
     {
         path: config.routes.productDetails,
-        component: ProductDetails, 
+        component: ProductDetails,
         layout: null,
     },
     {

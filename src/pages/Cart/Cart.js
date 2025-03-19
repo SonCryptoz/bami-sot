@@ -25,10 +25,12 @@ import * as UserService from "@/services/UserService";
 import InputForm from "@/components/InputForm";
 import { updateUser } from "@/redux/slices/userSlice";
 import * as message from "@/components/Message/message";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 function Cart() {
+    const navigate = useNavigate();
     const order = useSelector((state) => state.order);
     const user = useSelector((state) => state.user);
     const [form] = Form.useForm();
@@ -188,6 +190,10 @@ function Cart() {
         }
     }, [isOpenModal, user?.name, user?.phone, user?.address, user?.city]);
 
+    const handleChangeAddress = () => {
+        setIsOpenModal(true);
+    };
+
     const handleUpdate = () => {
         const { name, phone, address, city } = stateUserDetails;
         if (!validateUserDetails()) {
@@ -212,7 +218,7 @@ function Cart() {
         if (!user?.phone || !user?.address || !user?.name || !user?.city) {
             setIsOpenModal(true);
         } else {
-            alert("can not buy now...");
+            navigate("/order");
         }
     };
 
@@ -317,6 +323,18 @@ function Cart() {
                             <div className={cx("summary-item")}>
                                 <span>Phí vận chuyển:</span>
                                 <span>{convertPrice(deliveryMemo)}</span>
+                            </div>
+                            <div className={cx("bordered")}></div>
+                            <div className={cx("summary-item")}>
+                                <span>Địa chỉ:</span>
+                                <span style={{ color: "green", fontWeight: "600" }}>
+                                    {user?.address + ", " + user?.city}
+                                </span>
+                            </div>
+                            <div className={cx("summary-item", "right")}>
+                                <span className={cx("change-address")} onClick={handleChangeAddress}>
+                                    Thay đổi
+                                </span>
                             </div>
                             <div className={cx("summary-total")}>
                                 <span>Tổng thanh toán:</span>

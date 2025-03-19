@@ -1,12 +1,21 @@
-// import { useSelector } from "react-redux";
-// import classNames from "classnames/bind";
+import classNames from "classnames/bind";
 
-// import styles from "./Order.module.scss";
+import Header from "@/layouts/components/Header";
+import Footer from "@/layouts/components/Footer";
+import styles from "./Order.module.scss";
 
-// const cx = classNames.bind(styles);
+const cx = classNames.bind(styles);
 
 function Order() {
-    return <div></div>;
+    return (
+        <div className={cx("wrapper")}>
+            <Header />
+            <div className={cx("container")}>
+                <h1 className={cx("order-title")}>Thanh toán đơn hàng</h1>
+            </div>
+            <Footer />
+        </div>
+    );
 }
 
 export default Order;

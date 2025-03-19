@@ -240,11 +240,31 @@
     color: var(--text-color);
 }
 
+.bordered {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
 .summary-item {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
     font-size: 1.6rem;
+
+    .change-address {
+        text-decoration: underline;
+        cursor: pointer;
+        transition: linear 0.05s;
+
+        &:active {
+            color: var(--primary);
+        }
+    }
+}
+
+.right {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .summary-total {
